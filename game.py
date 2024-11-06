@@ -25,6 +25,9 @@ class Game:
                 self.playing = False
 
             self.display.fill(self.BLACK)
+
+            self.draw_text('COMING SOON', 20, self.DISPLAY_W / 2, self.DISPLAY_H / 2, self.WHITE, position='center')
+
             self.window.blit(self.display, (0,0))
             pygame.display.update()
             self.reset_keys()
@@ -49,15 +52,21 @@ class Game:
 
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
 
 
-    def draw_text(self, text, size, x, y, color = None):
+    def draw_text(self, text, size, x, y, color = None, **kwargs):
         if not color:
             color = self.WHITE
 
         font = pygame.font.Font(self.font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
-        text_rect.topleft = (x, y)
+
+        position = 'topleft'
+        if 'position' in kwargs:
+            position = kwargs['position']
+
+        setattr(text_rect, position, (x, y))
+
         self.display.blit(text_surface, text_rect)
