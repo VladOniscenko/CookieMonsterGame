@@ -6,7 +6,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
         self.display = pygame.Surface((1280, 720))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
@@ -33,8 +33,8 @@ class Game:
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running, self.playing = False, False
-                self.cur_menu.run_display = False
+                self.running, self.playing, self.rating.rating, self.cur_menu.run_display = False, False, False, False
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     self.START_KEY = True
@@ -44,6 +44,8 @@ class Game:
                     self.DOWN_KEY = True
                 if event.key == pygame.K_UP:
                     self.UP_KEY = True
+                if event.key == pygame.K_ESCAPE:
+                    self.ESC_KEY = True
 
 
     def reset_keys(self):

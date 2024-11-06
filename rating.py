@@ -6,3 +6,6 @@ class Rating:
         self.rating = False
         self.game = game
 
+    def show_rating(self):
+        # todo implement display of rating
+        pass
