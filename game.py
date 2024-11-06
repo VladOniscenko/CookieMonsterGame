@@ -1,5 +1,6 @@
 import pygame
 from menu import MainMenu
+from rating import Rating
 
 class Game:
     def __init__(self):
@@ -13,6 +14,7 @@ class Game:
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.BG = pygame.transform.scale(pygame.image.load("assets/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
         self.cur_menu = MainMenu(self)
+        self.rating = Rating(self)
 
 
     def game_loop(self):
