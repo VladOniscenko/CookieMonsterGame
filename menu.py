@@ -11,8 +11,12 @@ class Menu():
 
         self.offset = -50
 
-    def draw_cursor(self):
-        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, self.game.BLACK)
+    def draw_cursor(self, **kwargs):
+        color = self.game.BLACK
+        if 'color' in kwargs:
+            color = kwargs['color']
+
+        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, color)
 
     def blit_screen(self):
         self.game.window.blit(self.game.display, (0, 0))
@@ -63,7 +67,6 @@ class MainMenu(Menu):
             else:
                 self.cursor_rect.midtop = (self.playx + self.offset, self.playy)
                 self.state = "Start"
-
         elif self.game.UP_KEY:
             if self.state == "Start":
                 self.cursor_rect.midtop = (self.quitx + self.offset, self.quity)
