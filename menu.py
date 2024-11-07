@@ -94,3 +94,63 @@ class MainMenu(Menu):
                 sys.exit()
             self.run_display = False
 
+
+class DifficultyMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = 'Easy'
+
+        self.easyx, self.easyy = self.mid_w - 50, self.mid_h - 30
+        self.mediumx, self.mediumy = self.mid_w - 50, self.mid_h
+        self.hardx, self.hardy = self.mid_w - 50, self.mid_h + 30
+        self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
+
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events()
+            self.check_input()
+
+            self.game.display.fill(self.game.BLACK)
+
+            self.game.draw_text('DIFFICULTY', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 100, position='center')
+            self.game.draw_text('Easy', 20, self.easyx, self.easyy, color=(1, 50, 32))
+            self.game.draw_text('Medium', 20, self.mediumx, self.mediumy, color=(199, 110, 0))
+            self.game.draw_text('Hard', 20, self.hardx, self.hardy, color=(139, 0, 0))
+
+            self.draw_cursor(color=self.game.WHITE)
+            self.blit_screen()
+
+    def move_cursor(self):
+        if self.game.UP_KEY:
+            if self.state == "Easy":
+                self.state = 'Hard'
+                self.cursor_rect.midtop = (self.hardx + self.offset, self.hardy)
+            elif self.state == "Hard":
+                self.state = "Medium"
+                self.cursor_rect.midtop = (self.mediumx + self.offset, self.mediumy)
+            else:
+                self.state = "Easy"
+                self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
+        elif self.game.DOWN_KEY:
+            if self.state == "Easy":
+                self.state = "Medium"
+                self.cursor_rect.midtop = (self.mediumx + self.offset, self.mediumy)
+            elif self.state == "Medium":
+                self.state = 'Hard'
+                self.cursor_rect.midtop = (self.hardx + self.offset, self.hardy)
+            else:
+                self.state = "Easy"
+                self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
+
+    def check_input(self):
+        self.move_cursor()
+
+        print(self.game.START_KEY)
+        if self.game.START_KEY:
+            self.game.game_mode = self.state
+            self.game.playing = True
+        elif self.game.BACK_KEY or self.game.ESC_KEY:
+            self.game.cur_menu = self.game.main_menu
+        self.run_display = False
