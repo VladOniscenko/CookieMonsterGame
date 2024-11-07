@@ -1,6 +1,9 @@
+from datetime import time
+
 import pygame
 from menu import *
 from rating import Rating
+from mini_game import *
 
 class Game:
     def __init__(self):
@@ -18,19 +21,23 @@ class Game:
         self.difficulties = DifficultyMenu(self)
         self.rating = Rating(self)
         self.game_mode = False
+        self.start_time = False
 
 
     def game_loop(self):
         while self.playing:
-            self.check_events()
 
+            if not self.start_time:
+                self.start_time = time()
+
+            print(self.start_time)
+
+            self.check_events()
             if self.START_KEY:
                 self.playing = False
 
             self.display.fill(self.BLACK)
-
             self.draw_text('COMING SOON', 20, self.DISPLAY_W / 2, self.DISPLAY_H / 2, self.WHITE, position='center')
-
             self.window.blit(self.display, (0,0))
             pygame.display.update()
             self.reset_keys()
