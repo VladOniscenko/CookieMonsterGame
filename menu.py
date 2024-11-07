@@ -85,9 +85,10 @@ class MainMenu(Menu):
 
         if self.game.START_KEY:
             if self.state == 'Start':
-                self.game.playing = True
+                self.game.cur_menu = self.game.difficulties
             elif self.state == 'Scpreboard':
-                self.game.rating = True
+                # todo make new Scoreboard menu class and process it
+                pass
             elif self.state == 'Quit':
                 pygame.quit()
                 sys.exit()
