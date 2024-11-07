@@ -1,5 +1,5 @@
 import pygame
-from menu import MainMenu
+from menu import *
 from rating import Rating
 
 class Game:
@@ -13,8 +13,11 @@ class Game:
         self.font_name = './assets/8-BIT WONDER.TTF'
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.BG = pygame.transform.scale(pygame.image.load("assets/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
-        self.cur_menu = MainMenu(self)
+        self.main_menu = MainMenu(self)
+        self.cur_menu = self.main_menu
+        self.difficulties = DifficultyMenu(self)
         self.rating = Rating(self)
+        self.game_mode = False
 
 
     def game_loop(self):
