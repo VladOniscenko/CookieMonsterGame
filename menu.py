@@ -147,7 +147,6 @@ class DifficultyMenu(Menu):
     def check_input(self):
         self.move_cursor()
 
-        print(self.game.START_KEY)
         if self.game.START_KEY:
             self.game.game_mode = self.state
             self.game.playing = True
