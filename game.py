@@ -14,12 +14,13 @@ class Game:
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.font_name = './assets/8-BIT WONDER.TTF'
-        self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
+        self.BLACK, self.WHITE, self.BLUE, self.GREEN = (0, 0, 0), (255, 255, 255), (0, 0, 128), (0, 255, 0)
         self.BG = pygame.transform.scale(pygame.image.load("assets/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
         self.main_menu = MainMenu(self)
         self.cur_menu = self.main_menu
         self.difficulties = DifficultyMenu(self)
         self.rating = Rating(self)
+
         self.game_mode = False
         self.start_time = False
 
