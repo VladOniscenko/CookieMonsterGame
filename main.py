@@ -6,7 +6,7 @@ g = Game()
 while g.running:
     g.cur_menu.display_menu()
     g.game_loop()
-
+    g.rating.display_rating()
 
 
 
