@@ -114,9 +114,9 @@ class DifficultyMenu(Menu):
             self.game.display.fill(self.game.BLACK)
 
             self.game.draw_text('DIFFICULTY', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 100, position='center')
-            self.game.draw_text('Easy', 20, self.easyx, self.easyy, color=(1, 50, 32))
-            self.game.draw_text('Medium', 20, self.mediumx, self.mediumy, color=(199, 110, 0))
-            self.game.draw_text('Hard', 20, self.hardx, self.hardy, color=(139, 0, 0))
+            self.game.draw_text('Easy', 20, self.easyx, self.easyy, color=self.game.GREEN)
+            self.game.draw_text('Medium', 20, self.mediumx, self.mediumy, color=self.game.ORANGE)
+            self.game.draw_text('Hard', 20, self.hardx, self.hardy, color=self.game.RED)
 
             self.draw_cursor(color=self.game.WHITE)
             self.blit_screen()
