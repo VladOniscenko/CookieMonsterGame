@@ -1,11 +1,12 @@
+import random
+
 import pygame
 
 
 class MainGame:
     def __init__(self, game):
         self.game = game
-        self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
-        self.option_offset = 40
+        self.mid_w, self.mid_h = self.game.DISPLAY_W // 2, self.game.DISPLAY_H // 2
 
         self.run_display = True
         self.display_rules = True
@@ -18,7 +19,6 @@ class MainGame:
         self.title = ''
         self.rules = ''
 
-        self.cur_game = False
         self.game_rules = {
             'rps': {
                 'title': 'Rock Paper Scissor',
@@ -113,6 +113,21 @@ class MainGame:
 class RPSGame(MainGame):
     def __init__(self, game):
         MainGame.__init__(self, game)
+        self.display_options = False
+        self.state = 'paper'
+        self.options = ('rock', 'paper', 'scissors')
+        self.selected_option = False
+
+        self.rock_img = pygame.transform.scale(self.game.get_image('rock.png'), (250, 250))
+        self.paper_img = pygame.transform.scale(self.game.get_image('paper.png'), (250, 250))
+        self.scissors_img = pygame.transform.scale(self.game.get_image('scissor.png'), (250, 250))
+
+        self.rock_rect = pygame.Rect(self.mid_w - 400, self.mid_h - 125, 250, 250)
+        self.paper_rect = pygame.Rect(self.mid_w - 125, self.mid_h - 125, 250, 250)
+        self.scissors_rect = pygame.Rect(self.mid_w + 150, self.mid_h - 125, 250, 250)
+
+        self.border_color = self.game.BLACK
+        self.border_width = 5
 
 
     def play(self):
@@ -122,7 +137,60 @@ class RPSGame(MainGame):
         while self.run_display:
             self.game.display.fill(self.game.BLACK)
 
-            # todo make game
+            self.selected_option = random.choice(self.options)
+            self.show_options()
 
+            # todo show animation of shake and show results
+            while True:
+                self.game.display.fill(self.game.WHITE)
+                self.blit_screen()
+
+
+
+    def show_options(self):
+        self.display_options = True
+        while self.display_options:
+            self.game.check_events()
+            self.check_input()
+
+            self.game.display.fill(self.game.WHITE)
+            self.draw_options()
 
             self.blit_screen()
+
+
+    def draw_options(self):
+        if self.state == 'paper':
+            pygame.draw.rect(self.game.display, self.border_color, self.paper_rect, self.border_width)
+        elif self.state == 'rock':
+            pygame.draw.rect(self.game.display, self.border_color, self.rock_rect, self.border_width)
+        elif self.state == 'scissors':
+            pygame.draw.rect(self.game.display, self.border_color, self.scissors_rect, self.border_width)
+
+        self.game.display.blit(self.rock_img, self.rock_rect)
+        self.game.display.blit(self.paper_img, self.paper_rect)
+        self.game.display.blit(self.scissors_img, self.scissors_rect)
+
+
+    def move_cursor(self):
+        if self.game.LEFT_KEY:
+            if self.state == 'paper':
+                self.state = 'rock'
+            elif self.state == 'rock':
+                self.state = 'scissors'
+            else:
+                self.state = 'paper'
+        elif self.game.RIGHT_KEY:
+            if self.state == 'paper':
+                self.state = 'scissors'
+            elif self.state == 'rock':
+                self.state = 'paper'
+            else:
+                self.state = 'rock'
+
+
+    def check_input(self):
+        self.move_cursor()
+
+        if self.game.START_KEY:
+            self.display_options = False

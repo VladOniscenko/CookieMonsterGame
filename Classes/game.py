@@ -1,6 +1,8 @@
 import time
 from os.path import join
 
+import pygame
+
 from Classes.menu import *
 from Classes.rating import Rating
 from Classes.mini_game import *
@@ -20,7 +22,7 @@ class Game:
 
         # Reference values
         self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
+        self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False, False, False
 
         self.game_mode = False
         self.difficulty = False
@@ -85,10 +87,14 @@ class Game:
                     self.UP_KEY = True
                 if event.key == pygame.K_ESCAPE:
                     self.ESC_KEY = True
+                if event.key == pygame.K_LEFT:
+                    self.LEFT_KEY = True
+                if event.key == pygame.K_RIGHT:
+                    self.RIGHT_KEY = True
 
 
     def reset_keys(self):
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
+        self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False, False, False
 
 
     def draw_text(self, text, size, x, y, color = None, **kwargs):
@@ -121,6 +127,10 @@ class Game:
     def get_background(self, name):
         selected_image = pygame.image.load(join("assets", 'Background', name))
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
+
+
+    def get_image(self, name):
+        return pygame.image.load(join("assets", 'Other', name))
 
 
     def reset_game_mode(self):
