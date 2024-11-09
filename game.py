@@ -1,3 +1,4 @@
+import sys
 import time
 
 import pygame
@@ -8,25 +9,34 @@ from mini_game import *
 class Game:
     def __init__(self):
         pygame.init()
-        self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
-        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
 
-        self.display = pygame.Surface((1280, 720))
+        # Game init settings
+        self.WIDTH, self.HEIGHT = 1000, 800
+        self.FPS = 60
+
+        # Display setup
+        self.display = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
 
+        # Reference values
+        self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
+
+        # Styling
         self.font_name = './assets/Font/8-BIT WONDER.TTF'
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
         self.BG = pygame.transform.scale(pygame.image.load("assets/Background/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
 
+        # Classes
         self.main_menu = MainMenu(self)
         self.difficulties = DifficultyMenu(self)
         self.mini_game_menu = MiniGameMenu(self)
         self.rating = Rating(self)
 
+        self.cur_minigame = False
         self.cur_menu = self.main_menu
 
-        self.cur_minigame = False
 
 
     def game_loop(self):
@@ -57,7 +67,8 @@ class Game:
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running, self.playing, self.rating.rating, self.cur_menu.run_display = False, False, False, False
+                pygame.quit()
+                sys.exit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:

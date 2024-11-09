@@ -1,15 +1,28 @@
+import pygame.time
+
 from game import Game
 
-# game initialization
-g = Game()
 
-# main loop that checks if game is still running
-while g.running:
-    # display selection menu
-    g.cur_menu.display_menu()
+def main():
+    # game initialization
+    g = Game()
+    clock = pygame.time.Clock()
 
-    # display rating scoreboard
-    g.rating.display_rating()
+    # main loop that checks if game is still running
+    while g.running:
 
-    # main game loop
-    g.game_loop()
+        # clock speed Frames Per Second
+        clock.tick(g.FPS)
+
+        # display selection menu
+        g.cur_menu.display_menu()
+
+        # display rating scoreboard
+        g.rating.display_rating()
+
+        # main game loop
+        g.game_loop()
+
+
+if __name__ == '__main__':
+    main()
