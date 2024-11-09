@@ -1,7 +1,7 @@
 import sys
 import pygame
 
-class Menu():
+class Menu:
     def __init__(self, game):
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
@@ -12,12 +12,14 @@ class Menu():
 
         self.offset = -50
 
+
     def draw_cursor(self, **kwargs):
         color = self.game.BLACK
         if 'color' in kwargs:
             color = kwargs['color']
 
         self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, color)
+
 
     def blit_screen(self):
         self.game.window.blit(self.game.display, (0, 0))
@@ -81,6 +83,7 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.playx + self.offset, self.playy)
                 self.state = "Start"
 
+
     def check_input(self):
         self.move_cursor()
 
@@ -122,6 +125,7 @@ class DifficultyMenu(Menu):
             self.draw_cursor()
             self.blit_screen()
 
+
     def move_cursor(self):
         if self.game.UP_KEY:
             if self.state == "easy":
@@ -143,6 +147,7 @@ class DifficultyMenu(Menu):
             else:
                 self.state = "easy"
                 self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
+
 
     def check_input(self):
         self.move_cursor()
@@ -211,7 +216,11 @@ class MiniGameMenu(Menu):
 
         if self.game.START_KEY:
             self.run_display = False
+            self.game.game_mode = self.state
 
-            # todo after game implementation change this
-            self.game.game_mode = 'rps'
-            # self.game.selected_mini_game = self.state
+            # todo set more games up
+            # if self.state == 'rps':
+            #     self.game.cur_game = self.game.rps_game
+
+            # todo disable this later if more games available
+            self.game.cur_game = self.game.rps_game
