@@ -104,7 +104,6 @@ class DifficultyMenu(Menu):
         self.hardx, self.hardy = self.mid_w - 50, self.mid_h + 30
         self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
-        self.run_display = False
 
     def display_menu(self):
         self.run_display = True
@@ -158,7 +157,6 @@ class MiniGameMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = 'RPC'
-        self.run_display = False
 
         self.RPSx, self.RPSy = self.mid_w - 100, self.mid_h - 150
         self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
