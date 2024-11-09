@@ -1,6 +1,6 @@
 import pygame.time
 
-from game import Game
+from Classes.game import Game
 
 
 def main():

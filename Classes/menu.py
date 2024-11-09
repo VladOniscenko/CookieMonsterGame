@@ -44,7 +44,7 @@ class MainMenu(Menu):
             self.check_input()
 
             self.game.display.fill(self.game.BLACK)
-            self.game.display.blit(self.game.BG, (0, 0))
+            self.game.display.blit(self.game.get_background('main.png'), (0, 0))
 
             self.game.draw_text('Start', 20, self.playx, self.playy, self.game.BLACK)
             self.game.draw_text('Scoreboard', 20, self.scoreboardx, self.scoreboardy, self.game.BLACK)

@@ -1,17 +1,16 @@
-import sys
 import time
+from os.path import join
 
-import pygame
-from menu import *
-from rating import Rating
-from mini_game import *
+from Classes.menu import *
+from Classes.rating import Rating
+from Classes.mini_game import *
 
 class Game:
     def __init__(self):
         pygame.init()
 
         # Game init settings
-        self.WIDTH, self.HEIGHT = 1000, 800
+        self.WIDTH, self.HEIGHT = 1280, 720
         self.FPS = 60
 
         # Display setup
@@ -26,7 +25,6 @@ class Game:
         # Styling
         self.font_name = './assets/Font/8-BIT WONDER.TTF'
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
-        self.BG = pygame.transform.scale(pygame.image.load("assets/Background/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
 
         # Classes
         self.main_menu = MainMenu(self)
@@ -108,3 +106,7 @@ class Game:
         self.playing = True
         self.game_mode = difficulty
         self.start_time = int(time.time())
+
+    def get_background(self, name):
+        selected_image = pygame.image.load(join("assets", 'Background', name))
+        return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
