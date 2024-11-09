@@ -13,7 +13,7 @@ class Rating:
             self.game.check_events()
             self.check_input()
 
-            self.game.display.fill(self.game.BLACK)
+            self.game.display.fill(self.game.WHITE)
             self.game.draw_text('High Scores', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300, position='center')
 
             headers = ["Name", "Score", "Time", "Mode"]

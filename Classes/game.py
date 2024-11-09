@@ -39,7 +39,7 @@ class Game:
 
     def game_loop(self):
         while self.playing:
-            self.display.fill(self.BLACK)
+            self.display.fill(self.WHITE)
             self.check_events()
 
             # print(1)
@@ -87,7 +87,7 @@ class Game:
 
     def draw_text(self, text, size, x, y, color = None, **kwargs):
         if not color:
-            color = self.WHITE
+            color = self.BLACK
 
         font = pygame.font.Font(self.font_name, size)
         text_surface = font.render(text, True, color)

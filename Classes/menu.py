@@ -5,6 +5,7 @@ class Menu():
     def __init__(self, game):
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
+        self.option_offset = 40
 
         self.run_display = True
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
@@ -31,8 +32,8 @@ class MainMenu(Menu):
         self.start_pos = 100
 
         self.playx, self.playy = self.start_pos, self.mid_h - 50
-        self.scoreboardx, self.scoreboardy = self.start_pos, self.mid_h
-        self.quitx, self.quity = self.start_pos, self.mid_h + 50
+        self.scoreboardx, self.scoreboardy = self.start_pos, self.playy + self.option_offset
+        self.quitx, self.quity = self.start_pos, self.scoreboardy + self.option_offset
 
         self.cursor_rect.midtop = (self.start_pos + self.offset, self.playy)
 
@@ -43,7 +44,7 @@ class MainMenu(Menu):
             self.game.check_events()
             self.check_input()
 
-            self.game.display.fill(self.game.BLACK)
+            self.game.display.fill(self.game.WHITE)
             self.game.display.blit(self.game.get_background('main.png'), (0, 0))
 
             self.game.draw_text('Start', 20, self.playx, self.playy, self.game.BLACK)
@@ -100,8 +101,8 @@ class DifficultyMenu(Menu):
         self.state = 'Easy'
 
         self.easyx, self.easyy = self.mid_w - 50, self.mid_h - 30
-        self.mediumx, self.mediumy = self.mid_w - 50, self.mid_h
-        self.hardx, self.hardy = self.mid_w - 50, self.mid_h + 30
+        self.mediumx, self.mediumy = self.mid_w - 50, self.easyy + self.option_offset
+        self.hardx, self.hardy = self.mid_w - 50, self.mediumy + self.option_offset
         self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
 
@@ -111,14 +112,14 @@ class DifficultyMenu(Menu):
             self.game.check_events()
             self.check_input()
 
-            self.game.display.fill(self.game.BLACK)
+            self.game.display.fill(self.game.WHITE)
 
             self.game.draw_text('DIFFICULTY', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 100, position='center')
             self.game.draw_text('Easy', 20, self.easyx, self.easyy, color=self.game.GREEN)
             self.game.draw_text('Medium', 20, self.mediumx, self.mediumy, color=self.game.ORANGE)
             self.game.draw_text('Hard', 20, self.hardx, self.hardy, color=self.game.RED)
 
-            self.draw_cursor(color=self.game.WHITE)
+            self.draw_cursor()
             self.blit_screen()
 
     def move_cursor(self):
@@ -156,9 +157,11 @@ class DifficultyMenu(Menu):
 class MiniGameMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = 'RPC'
+        self.state = 'RPS'
 
         self.RPSx, self.RPSy = self.mid_w - 100, self.mid_h - 150
+        self.hangmanx, self.hangmany = self.RPSx, self.RPSy + self.option_offset
+        self.binarizex, self.binarizey = self.RPSx, self.hangmany + self.option_offset
         self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
 
     def display_menu(self):
@@ -167,28 +170,41 @@ class MiniGameMenu(Menu):
             self.game.check_events()
             self.check_input()
 
-            self.game.display.fill(self.game.BLACK)
+            self.game.display.fill(self.game.WHITE)
 
-            self.game.draw_text('SELECT GAME', 30, self.mid_w, self.mid_h - 250, position='center')
+            self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center')
             self.game.draw_text('Rock Paper Scissors', 20, self.RPSx, self.RPSy)
+            self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany)
+            self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey)
 
-            self.draw_cursor(color=self.game.WHITE)
+            self.draw_cursor(color=self.game.BLACK)
             self.blit_screen()
 
-    # def move_cursor(self):
-    #     if self.game.UP_KEY:
-    #         if self.state == "RPC":
-    #             self.state = 'RPC'
-    #             self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
-    #
-    #     elif self.game.DOWN_KEY:
-    #         if self.state == "RPC":
-    #             self.state = "RPC"
-    #             self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
+    def move_cursor(self):
+        if self.game.UP_KEY:
+            if self.state == 'RPS':
+                self.state = 'binarize'
+                self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
+            elif self.state == 'binarize':
+                self.state = 'hangman'
+                self.cursor_rect.midtop = (self.hangmanx + self.offset, self.hangmany)
+            else:
+                self.state = "RPS"
+                self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
+        elif self.game.DOWN_KEY:
+            if self.state == "RPS":
+                self.state = "hangman"
+                self.cursor_rect.midtop = (self.hangmanx + self.offset, self.hangmany)
+            elif self.state == 'hangman':
+                self.state = 'binarize'
+                self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
+            else:
+                self.state = "RPS"
+                self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
 
 
     def check_input(self):
-        # self.move_cursor()
+        self.move_cursor()
 
         if self.game.START_KEY:
             self.run_display = False
