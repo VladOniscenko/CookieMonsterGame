@@ -160,8 +160,8 @@ class MiniGameMenu(Menu):
         self.state = 'RPC'
         self.run_display = False
 
-        self.RPCx, self.RPCy = self.mid_w - 100, self.mid_h - 150
-        self.cursor_rect.midtop = (self.RPCx + self.offset, self.RPCy)
+        self.RPSx, self.RPSy = self.mid_w - 100, self.mid_h - 150
+        self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
 
     def display_menu(self):
         self.run_display = True
@@ -172,7 +172,7 @@ class MiniGameMenu(Menu):
             self.game.display.fill(self.game.BLACK)
 
             self.game.draw_text('SELECT GAME', 30, self.mid_w, self.mid_h - 250, position='center')
-            self.game.draw_text('Rock Paper Scissors', 20, self.RPCx, self.RPCy)
+            self.game.draw_text('Rock Paper Scissors', 20, self.RPSx, self.RPSy)
 
             self.draw_cursor(color=self.game.WHITE)
             self.blit_screen()
@@ -181,12 +181,12 @@ class MiniGameMenu(Menu):
     #     if self.game.UP_KEY:
     #         if self.state == "RPC":
     #             self.state = 'RPC'
-    #             self.cursor_rect.midtop = (self.RPCx + self.offset, self.RPCy)
+    #             self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
     #
     #     elif self.game.DOWN_KEY:
     #         if self.state == "RPC":
     #             self.state = "RPC"
-    #             self.cursor_rect.midtop = (self.RPCx + self.offset, self.RPCy)
+    #             self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
 
 
     def check_input(self):
