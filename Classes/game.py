@@ -26,16 +26,19 @@ class Game:
         self.difficulty = False
 
         # Styling
-        self.font_name = './assets/Font/8-BIT WONDER.TTF'
+        self.font = './assets/Font/8-BIT WONDER.TTF'
+        self.second_font = './assets/Font/Miguel De Northern.ttf'
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
 
         # Classes
         self.main_menu = MainMenu(self)
         self.difficulties = DifficultyMenu(self)
         self.mini_game_menu = MiniGameMenu(self)
-        self.mini_game = MiniGame(self)
         self.rating = Rating(self)
 
+        self.rps_game = RPSGame(self)
+
+        self.cur_game = self.rps_game
         self.cur_menu = self.main_menu
 
 
@@ -44,15 +47,15 @@ class Game:
             self.display.fill(self.WHITE)
             self.check_events()
 
+
             # select game
             self.reset_game_mode()
             self.mini_game_menu.display_menu()
 
-            # set game rules, title, attempts etc.
-            self.mini_game.configure()
 
-            # play mini game
-            # self.mini_game.cur_game.play()
+            # set game rules, title, attempts etc.
+            self.cur_game.configure()
+            self.cur_game.play()
 
             # todo start mini game based on selection
             # todo print game rules
@@ -89,10 +92,15 @@ class Game:
 
 
     def draw_text(self, text, size, x, y, color = None, **kwargs):
+
         if not color:
             color = self.BLACK
 
-        font = pygame.font.Font(self.font_name, size)
+        selected_font = self.font
+        if 'font' in kwargs:
+            selected_font = kwargs['font']
+        font = pygame.font.Font(selected_font, size)
+
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
 
