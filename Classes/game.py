@@ -22,6 +22,9 @@ class Game:
         self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
 
+        self.game_mode = False
+        self.difficulty = False
+
         # Styling
         self.font_name = './assets/Font/8-BIT WONDER.TTF'
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
@@ -30,11 +33,10 @@ class Game:
         self.main_menu = MainMenu(self)
         self.difficulties = DifficultyMenu(self)
         self.mini_game_menu = MiniGameMenu(self)
+        self.mini_game = MiniGame(self)
         self.rating = Rating(self)
 
-        self.cur_minigame = False
         self.cur_menu = self.main_menu
-
 
 
     def game_loop(self):
@@ -42,24 +44,25 @@ class Game:
             self.display.fill(self.WHITE)
             self.check_events()
 
-            # print(1)
-            # todo let the user select mini game that he wants to play (rock paper scissors, Hangman, binary to digit)
-                # todo show options
-                # todo track events and move cursor
-                # todo check for selection and set cur_mini_game
+            # select game
+            self.reset_game_mode()
             self.mini_game_menu.display_menu()
+
+            # set game rules, title, attempts etc.
+            self.mini_game.configure()
+
+            # play mini game
+            # self.mini_game.cur_game.play()
 
             # todo start mini game based on selection
             # todo print game rules
             # todo let user play the game
 
-            # print(2)
 
             self.window.blit(self.display, (0,0))
             pygame.display.update()
 
             self.reset_keys()
-
 
 
     def check_events(self):
@@ -102,11 +105,15 @@ class Game:
         self.display.blit(text_surface, text_rect)
 
 
-    def start_game(self, difficulty):
+    def start_game(self):
         self.playing = True
-        self.game_mode = difficulty
         self.start_time = int(time.time())
+
 
     def get_background(self, name):
         selected_image = pygame.image.load(join("assets", 'Background', name))
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
+
+
+    def reset_game_mode(self):
+        self.game_mode = False

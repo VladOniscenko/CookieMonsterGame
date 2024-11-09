@@ -98,7 +98,7 @@ class MainMenu(Menu):
 class DifficultyMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = 'Easy'
+        self.state = 'easy'
 
         self.easyx, self.easyy = self.mid_w - 50, self.mid_h - 30
         self.mediumx, self.mediumy = self.mid_w - 50, self.easyy + self.option_offset
@@ -115,33 +115,33 @@ class DifficultyMenu(Menu):
             self.game.display.fill(self.game.WHITE)
 
             self.game.draw_text('DIFFICULTY', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 100, position='center')
-            self.game.draw_text('Easy', 20, self.easyx, self.easyy, color=self.game.GREEN)
-            self.game.draw_text('Medium', 20, self.mediumx, self.mediumy, color=self.game.ORANGE)
-            self.game.draw_text('Hard', 20, self.hardx, self.hardy, color=self.game.RED)
+            self.game.draw_text('easy', 20, self.easyx, self.easyy, color=self.game.GREEN)
+            self.game.draw_text('medium', 20, self.mediumx, self.mediumy, color=self.game.ORANGE)
+            self.game.draw_text('hard', 20, self.hardx, self.hardy, color=self.game.RED)
 
             self.draw_cursor()
             self.blit_screen()
 
     def move_cursor(self):
         if self.game.UP_KEY:
-            if self.state == "Easy":
-                self.state = 'Hard'
+            if self.state == "easy":
+                self.state = 'hard'
                 self.cursor_rect.midtop = (self.hardx + self.offset, self.hardy)
-            elif self.state == "Hard":
-                self.state = "Medium"
+            elif self.state == "hard":
+                self.state = "medium"
                 self.cursor_rect.midtop = (self.mediumx + self.offset, self.mediumy)
             else:
-                self.state = "Easy"
+                self.state = "easy"
                 self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
         elif self.game.DOWN_KEY:
-            if self.state == "Easy":
-                self.state = "Medium"
+            if self.state == "easy":
+                self.state = "medium"
                 self.cursor_rect.midtop = (self.mediumx + self.offset, self.mediumy)
-            elif self.state == "Medium":
-                self.state = 'Hard'
+            elif self.state == "medium":
+                self.state = 'hard'
                 self.cursor_rect.midtop = (self.hardx + self.offset, self.hardy)
             else:
-                self.state = "Easy"
+                self.state = "easy"
                 self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
     def check_input(self):
@@ -149,7 +149,8 @@ class DifficultyMenu(Menu):
         self.run_display = False
 
         if self.game.START_KEY:
-            self.game.start_game(self.state)
+            self.game.difficulty = self.state
+            self.game.start_game()
         elif self.game.BACK_KEY or self.game.ESC_KEY:
             self.game.cur_menu = self.game.main_menu
 
@@ -157,12 +158,13 @@ class DifficultyMenu(Menu):
 class MiniGameMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
-        self.state = 'RPS'
+        self.state = 'rps'
 
-        self.RPSx, self.RPSy = self.mid_w - 100, self.mid_h - 150
-        self.hangmanx, self.hangmany = self.RPSx, self.RPSy + self.option_offset
-        self.binarizex, self.binarizey = self.RPSx, self.hangmany + self.option_offset
-        self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
+        self.rpsx, self.rpsy = self.mid_w - 100, self.mid_h - 150
+        self.hangmanx, self.hangmany = self.rpsx, self.rpsy + self.option_offset
+        self.binarizex, self.binarizey = self.rpsx, self.hangmany + self.option_offset
+        self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
+
 
     def display_menu(self):
         self.run_display = True
@@ -173,34 +175,35 @@ class MiniGameMenu(Menu):
             self.game.display.fill(self.game.WHITE)
 
             self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center')
-            self.game.draw_text('Rock Paper Scissors', 20, self.RPSx, self.RPSy)
-            self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany)
-            self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey)
+            self.game.draw_text('Rock Paper Scissors', 20, self.rpsx, self.rpsy)
+            self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany, color=self.game.RED)
+            self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey, color=self.game.RED)
 
             self.draw_cursor(color=self.game.BLACK)
             self.blit_screen()
 
+
     def move_cursor(self):
         if self.game.UP_KEY:
-            if self.state == 'RPS':
+            if self.state == 'rps':
                 self.state = 'binarize'
                 self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
             elif self.state == 'binarize':
                 self.state = 'hangman'
                 self.cursor_rect.midtop = (self.hangmanx + self.offset, self.hangmany)
             else:
-                self.state = "RPS"
-                self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
+                self.state = "rps"
+                self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
         elif self.game.DOWN_KEY:
-            if self.state == "RPS":
+            if self.state == "rps":
                 self.state = "hangman"
                 self.cursor_rect.midtop = (self.hangmanx + self.offset, self.hangmany)
             elif self.state == 'hangman':
                 self.state = 'binarize'
                 self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
             else:
-                self.state = "RPS"
-                self.cursor_rect.midtop = (self.RPSx + self.offset, self.RPSy)
+                self.state = "rps"
+                self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
 
 
     def check_input(self):
@@ -208,4 +211,7 @@ class MiniGameMenu(Menu):
 
         if self.game.START_KEY:
             self.run_display = False
-            self.game.play_mini_game(self.state)
+
+            # todo after game implementation change this
+            self.game.game_mode = 'rps'
+            # self.game.selected_mini_game = self.state
