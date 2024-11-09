@@ -36,6 +36,9 @@ class Game:
 
             # print(1)
             # todo let the user select mini game that he wants to play (rock paper scissors, Hangman, binary to digit)
+                # todo show options
+                # todo track events and move cursor
+                # todo check for selection and set cur_mini_game
             self.mini_game_menu.display_menu()
 
             # todo start mini game based on selection
