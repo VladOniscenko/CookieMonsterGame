@@ -1,4 +1,4 @@
-from datetime import time
+import time
 
 import pygame
 from menu import *
@@ -21,28 +21,34 @@ class Game:
 
         self.main_menu = MainMenu(self)
         self.difficulties = DifficultyMenu(self)
+        self.mini_game_menu = MiniGameMenu(self)
         self.rating = Rating(self)
 
         self.cur_menu = self.main_menu
 
+        self.cur_minigame = False
+
 
     def game_loop(self):
         while self.playing:
-
-            if not self.start_time:
-                self.start_time = time()
-
-            print(self.start_time)
-
-            self.check_events()
-            if self.START_KEY:
-                self.playing = False
-
             self.display.fill(self.BLACK)
-            self.draw_text('COMING SOON', 20, self.DISPLAY_W / 2, self.DISPLAY_H / 2, self.WHITE, position='center')
+            self.check_events()
+
+            # print(1)
+            # todo let the user select mini game that he wants to play (rock paper scissors, Hangman, binary to digit)
+            self.mini_game_menu.display_menu()
+
+            # todo start mini game based on selection
+            # todo print game rules
+            # todo let user play the game
+
+            # print(2)
+
             self.window.blit(self.display, (0,0))
             pygame.display.update()
+
             self.reset_keys()
+
 
 
     def check_events(self):
@@ -82,3 +88,9 @@ class Game:
         setattr(text_rect, position, (x, y))
 
         self.display.blit(text_surface, text_rect)
+
+
+    def start_game(self, difficulty):
+        self.playing = True
+        self.game_mode = difficulty
+        self.start_time = int(time.time())
