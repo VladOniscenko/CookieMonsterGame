@@ -17,7 +17,7 @@ class Game:
 
         self.font_name = './assets/8-BIT WONDER.TTF'
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
-        self.BG = pygame.transform.scale(pygame.image.load("assets/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
+        self.BG = pygame.transform.scale(pygame.image.load("assets/Background/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
 
         self.main_menu = MainMenu(self)
         self.difficulties = DifficultyMenu(self)
