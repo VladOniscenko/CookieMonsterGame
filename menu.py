@@ -146,10 +146,52 @@ class DifficultyMenu(Menu):
 
     def check_input(self):
         self.move_cursor()
+        self.run_display = False
 
         if self.game.START_KEY:
-            self.game.game_mode = self.state
-            self.game.playing = True
+            self.game.start_game(self.state)
         elif self.game.BACK_KEY or self.game.ESC_KEY:
             self.game.cur_menu = self.game.main_menu
+
+
+class MiniGameMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = 'RPC'
         self.run_display = False
+
+        self.RPCx, self.RPCy = self.mid_w - 100, self.mid_h - 150
+        self.cursor_rect.midtop = (self.RPCx + self.offset, self.RPCy)
+
+    def display_menu(self):
+        self.run_display = True
+        while self.run_display:
+            self.game.check_events()
+            self.check_input()
+
+            self.game.display.fill(self.game.BLACK)
+
+            self.game.draw_text('SELECT GAME', 30, self.mid_w, self.mid_h - 250, position='center')
+            self.game.draw_text('Rock Paper Scissors', 20, self.RPCx, self.RPCy)
+
+            self.draw_cursor(color=self.game.WHITE)
+            self.blit_screen()
+
+    # def move_cursor(self):
+    #     if self.game.UP_KEY:
+    #         if self.state == "RPC":
+    #             self.state = 'RPC'
+    #             self.cursor_rect.midtop = (self.RPCx + self.offset, self.RPCy)
+    #
+    #     elif self.game.DOWN_KEY:
+    #         if self.state == "RPC":
+    #             self.state = "RPC"
+    #             self.cursor_rect.midtop = (self.RPCx + self.offset, self.RPCy)
+
+
+    def check_input(self):
+        # self.move_cursor()
+
+        if self.game.START_KEY:
+            self.run_display = False
+            self.game.play_mini_game(self.state)
