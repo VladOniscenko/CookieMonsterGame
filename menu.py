@@ -104,6 +104,7 @@ class DifficultyMenu(Menu):
         self.hardx, self.hardy = self.mid_w - 50, self.mid_h + 30
         self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
+        self.run_display = False
 
     def display_menu(self):
         self.run_display = True

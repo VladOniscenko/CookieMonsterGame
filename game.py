@@ -8,21 +8,22 @@ from mini_game import *
 class Game:
     def __init__(self):
         pygame.init()
-        self.running, self.playing = True, False
+        self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False
+
         self.display = pygame.Surface((1280, 720))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
+
         self.font_name = './assets/8-BIT WONDER.TTF'
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
         self.BG = pygame.transform.scale(pygame.image.load("assets/bg.png"), (self.DISPLAY_W, self.DISPLAY_H))
+
         self.main_menu = MainMenu(self)
-        self.cur_menu = self.main_menu
         self.difficulties = DifficultyMenu(self)
         self.rating = Rating(self)
 
-        self.game_mode = False
-        self.start_time = False
+        self.cur_menu = self.main_menu
 
 
     def game_loop(self):
