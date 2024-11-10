@@ -141,5 +141,7 @@ class Game:
             assets_path = os.path.join(base_path, 'assets', 'Other')
 
         return pygame.image.load(os.path.join(assets_path, name))
+
+
     def reset_game_mode(self):
         self.game_mode = False
