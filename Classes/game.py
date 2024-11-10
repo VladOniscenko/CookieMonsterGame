@@ -1,5 +1,6 @@
 import time
-from os.path import join
+from os.path import join, abspath
+import os
 
 import pygame
 
@@ -128,10 +129,17 @@ class Game:
         selected_image = pygame.image.load(join("assets", 'Background', name))
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
 
-
     def get_image(self, name):
-        return pygame.image.load(join("assets", 'Other', name))
+        # For the deployed version (PyInstaller)
+        base_path = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
 
+        # If running in the development environment, use the current working directory
+        if not hasattr(sys, '_MEIPASS'):
+            assets_path = os.path.join(os.getcwd(), 'assets', 'Other')
+        else:
+            # If running as a bundled executable, use the _MEIPASS path
+            assets_path = os.path.join(base_path, 'assets', 'Other')
 
+        return pygame.image.load(os.path.join(assets_path, name))
     def reset_game_mode(self):
         self.game_mode = False
