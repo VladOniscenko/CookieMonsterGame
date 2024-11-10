@@ -135,30 +135,33 @@ class RPSGame(MainGame):
         self.right_rock = pygame.transform.scale(self.rock_img, (500, 500))
         self.right_rock_rect = pygame.Rect(self.game.DISPLAY_W - 400, self.mid_h // 2, 500, 500)
         self.right_paper = pygame.transform.scale(self.paper_img, (500, 500))
-        self.right_paper_rect = pygame.Rect(self.game.DISPLAY_W - 400, self.mid_h // 2, 500, 500)
+        self.right_paper_rect = pygame.Rect(self.game.DISPLAY_W - 450, self.mid_h // 2, 500, 500)
         self.right_scissors = pygame.transform.scale(self.scissors_img, (500, 500))
-        self.right_scissors_rect = pygame.Rect(self.game.DISPLAY_W - 400, self.mid_h // 2, 500, 500)
+        self.right_scissors_rect = pygame.Rect(self.game.DISPLAY_W - 450, self.mid_h // 2, 500, 500)
 
         # large left options
         self.left_rock = pygame.transform.scale(self.l_rock_img, (500, 500))
         self.left_rock_rect = pygame.Rect(-100, self.mid_h // 2, 500, 500)
         self.left_paper = pygame.transform.scale(self.l_paper_img, (500, 500))
-        self.left_paper_rect = pygame.Rect(-100, self.mid_h // 2, 500, 500)
+        self.left_paper_rect = pygame.Rect(-50, self.mid_h // 2, 500, 500)
         self.left_scissors = pygame.transform.scale(self.l_scissors_img, (500, 500))
-        self.left_scissors_rect = pygame.Rect(-100, self.mid_h // 2, 500, 500)
+        self.left_scissors_rect = pygame.Rect(-50, self.mid_h // 2, 500, 500)
 
         # small options for selection
-        self.rock = pygame.transform.scale(self.rock_img, (250, 250))
-        self.paper = pygame.transform.scale(self.paper_img, (250, 250))
-        self.scissors = pygame.transform.scale(self.scissors_img, (250, 250))
+        size = 150
+        self.rock = pygame.transform.scale(self.rock_img, (size, size))
+        self.paper = pygame.transform.scale(self.paper_img, (size, size))
+        self.scissors = pygame.transform.scale(self.scissors_img, (size, size))
 
-        self.rock_rect = pygame.Rect(self.mid_w - 400, self.mid_h - 125, 250, 250)
-        self.paper_rect = pygame.Rect(self.mid_w - 125, self.mid_h - 125, 250, 250)
-        self.scissors_rect = pygame.Rect(self.mid_w + 150, self.mid_h - 125, 250, 250)
+        gap = 175
+        self.rock_rect = pygame.Rect((self.game.DISPLAY_W - size) // 2 - gap, (self.game.DISPLAY_H - size) // 2, size, size)
+        self.paper_rect = pygame.Rect((self.game.DISPLAY_W - size) // 2, (self.game.DISPLAY_H - size) // 2, size, size)
+        self.scissors_rect = pygame.Rect((self.game.DISPLAY_W - size) // 2 + gap, (self.game.DISPLAY_H - size) // 2, size, size)
 
         # selection border
         self.border_color = self.game.RED
         self.border_width = 5
+
 
     def check_user_won(self):
         self.total_attempts += 1
@@ -238,8 +241,7 @@ class RPSGame(MainGame):
 
             # Render the updated positions
             self.game.display.fill(self.game.WHITE)
-            self.game.display.blit(self.right_rock, self.right_rock_rect)
-            self.game.display.blit(self.left_rock, self.left_rock_rect)
+            self.show_large_hands()
             self.blit_screen()
 
             # Delay for smooth animation
@@ -273,12 +275,14 @@ class RPSGame(MainGame):
 
             self.blit_screen()
 
+
     def show_score(self):
         self.game.draw_text(str(self.incorrect), 50, 15, 10, color=self.game.RED)
 
         self.game.draw_text(str(self.correct), 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
 
         self.game.draw_text(str(self.tie), 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
+
 
     def draw_options(self):
         if self.state == 'paper':
@@ -291,6 +295,8 @@ class RPSGame(MainGame):
         self.game.display.blit(self.rock, self.rock_rect)
         self.game.display.blit(self.paper, self.paper_rect)
         self.game.display.blit(self.scissors, self.scissors_rect)
+
+        self.show_large_hands()
 
 
     def move_cursor(self):
@@ -315,3 +321,8 @@ class RPSGame(MainGame):
 
         if self.game.START_KEY:
             self.display_options = False
+
+
+    def show_large_hands(self):
+        self.game.display.blit(self.right_rock, self.right_rock_rect)
+        self.game.display.blit(self.left_rock, self.left_rock_rect)
