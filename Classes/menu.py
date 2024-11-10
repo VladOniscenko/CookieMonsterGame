@@ -212,7 +212,7 @@ class MiniGameMenu(Menu):
 
 
     def check_input(self):
-        self.move_cursor()
+        # self.move_cursor() # todo enable if other games available
 
         if self.game.START_KEY:
             self.run_display = False
