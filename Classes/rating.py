@@ -38,7 +38,7 @@ class Rating:
         self.game.reset_keys()
 
     def get_scores(self):
-        with open('assets/scoreboard.csv', mode='r') as file:
+        with open(self.game.get_asset_path('Other', 'scoreboard.csv'), mode='r') as file:
             data = list(csv.reader(file))
         return sorted(data, key=lambda line: int(line[1]))[:11]
 
