@@ -211,7 +211,7 @@ class RPSGame(MainGame):
         self.display_animation = True
         start_time = time.time()
 
-        cycle_duration = 0.5
+        cycle_duration = 0.25
         cycle_height = 250
 
         original_left_y = self.left_rock_rect.y
@@ -243,9 +243,6 @@ class RPSGame(MainGame):
             self.game.display.fill(self.game.WHITE)
             self.show_large_hands()
             self.blit_screen()
-
-            # Delay for smooth animation
-            pygame.time.delay(20)
 
         start_time = time.time()
         while time.time() - start_time < 2:
