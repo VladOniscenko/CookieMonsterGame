@@ -40,7 +40,7 @@ class Rating:
     def get_scores(self):
         with open(self.game.get_asset_path('Other', 'scoreboard.csv'), mode='r') as file:
             data = list(csv.reader(file))
-        return sorted(data, key=lambda line: int(line[1]))[:11]
+        return sorted(data, key=lambda line: int(line[1]), reverse=True)[:11]
 
 
     def check_input(self):
