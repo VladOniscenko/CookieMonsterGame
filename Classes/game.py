@@ -98,10 +98,14 @@ class Game:
         self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False, False, False
 
 
-    def draw_text(self, text, size, x, y, color = None, **kwargs):
+    def draw_text(self, text, size, x, y, **kwargs):
 
-        if not color:
-            color = self.BLACK
+        if not isinstance(text, str):
+            text = str(text)
+
+        color = self.BLACK
+        if 'color' in kwargs:
+            color = kwargs['color']
 
         selected_font = self.font
         if 'font' in kwargs:
