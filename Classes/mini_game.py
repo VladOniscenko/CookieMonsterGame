@@ -10,7 +10,7 @@ class MainGame:
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W // 2, self.game.DISPLAY_H // 2
 
-        self.run_display, self.display_rules, self.running = True, True, False
+        self.run_display, self.show_rules, self.running = True, True, False
         self.total_attempts, self.attempt, self.correct, self.incorrect, self.tie, self.title, self.rules = 0, 0, 0, 0, 0, '', ''
 
         self.game_rules = {
@@ -50,17 +50,17 @@ class MainGame:
         self.game.reset_keys()
 
 
-    def show_rules(self):
-        self.display_rules = True
+    def display_rules(self):
+        self.show_rules = True
         font_size = 30
         line_height = font_size + 5
         lines = self.split_text(self.rules, font_size, self.mid_w)
 
-        while self.display_rules:
+        while self.show_rules:
             self.game.check_events()
 
             if self.game.START_KEY:
-                self.display_rules = False
+                self.show_rules = False
 
             self.game.display.fill(self.game.WHITE)
 
@@ -139,7 +139,7 @@ class RPSGame(MainGame):
 
     def play(self):
         self.run_display = True
-        self.show_rules()
+        self.display_rules()
 
         while self.run_display:
             self.game.display.fill(self.game.WHITE)
@@ -188,13 +188,9 @@ class RPSGame(MainGame):
         while time.time() - start_time < 2:
             self.game.display.fill(self.game.WHITE)
 
-            # display right large hand selected by user
-            user_selected = self.options[f'r_{self.state}']
-            self.game.display.blit(user_selected.img, user_selected.rect)
-
-            # display left large hand selected by game
-            game_selected = self.options[f'l_{self.random_option}']
-            self.game.display.blit(game_selected.img, game_selected.rect)
+            # display right and left large hand selected by user and game
+            self.options[f'r_{self.state}'].draw()
+            self.options[f'l_{self.random_option}'].draw()
 
             # Display result text
             text, color = self.result_text[self.is_winner]
@@ -204,9 +200,9 @@ class RPSGame(MainGame):
 
 
     def display_score(self):
-        self.game.draw_text(str(self.incorrect), 50, 15, 10, color=self.game.RED)
-        self.game.draw_text(str(self.correct), 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
-        self.game.draw_text(str(self.tie), 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
+        self.game.draw_text(self.incorrect, 50, 15, 10, color=self.game.RED)
+        self.game.draw_text(self.correct, 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
+        self.game.draw_text(self.tie, 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
 
 
     def display_animation(self):
@@ -244,7 +240,7 @@ class RPSGame(MainGame):
 
             # Render the updated positions
             self.game.display.fill(self.game.WHITE)
-            self.show_large_hands()
+            self.display_large_hands()
             self.blit_screen()
 
 
@@ -252,15 +248,19 @@ class RPSGame(MainGame):
         option = self.options[self.state]
         pygame.draw.rect(self.game.display, option.border_color, option.rect, option.border_width)
 
-        self.game.display.blit(self.s_rock.img, self.s_rock.rect)
-        self.game.display.blit(self.s_paper.img, self.s_paper.rect)
-        self.game.display.blit(self.s_scissors.img, self.s_scissors.rect)
+        self.s_rock.draw()
+        self.s_paper.draw()
+        self.s_scissors.draw()
 
-        self.show_large_hands()
+        self.display_large_hands()
 
 
     def move_cursor(self):
+        # get index of user selected option of (rock, paper, scissors)
         current_index = RPS_OPTIONS.index(self.state)
+
+        # check if user clicks left or to the right
+        # set current selected option
         if self.game.LEFT_KEY:
             self.state = RPS_OPTIONS[(current_index - 1) % len(RPS_OPTIONS)]
         elif self.game.RIGHT_KEY:
@@ -273,9 +273,9 @@ class RPSGame(MainGame):
             self.show_menu = False
 
 
-    def show_large_hands(self):
-        self.game.display.blit(self.r_rock.img, self.r_rock.rect)
-        self.game.display.blit(self.l_rock.img, self.l_rock.rect)
+    def display_large_hands(self):
+        self.r_rock.draw()
+        self.l_rock.draw()
 
 
 class Hand:
@@ -295,3 +295,6 @@ class Hand:
 
         self.border_color = self.game.RED
         self.border_width = 5
+
+    def draw(self):
+        self.game.display.blit(self.img, self.rect)
