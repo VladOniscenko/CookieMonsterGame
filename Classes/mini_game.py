@@ -1,6 +1,6 @@
 import random
 import time
-
+from functions import *
 import pygame
 
 RPS_OPTIONS = ('rock', 'paper', 'scissors')
@@ -288,7 +288,7 @@ class Hand:
         self.left_handed = left_handed
         self.w, self.h, self.x, self.y = w, h, x, y
 
-        self.__loaded_img = self.game.get_image((f'{self.type}' if not self.left_handed else f'l_{self.type}') + '.png')
+        self.__loaded_img = get_image((f'{self.type}' if not self.left_handed else f'l_{self.type}') + '.png')
         self.img = pygame.transform.scale(self.__loaded_img, (self.w, self.h))
 
         self.rect = pygame.Rect(self.x, self.y, self.w, self.h)

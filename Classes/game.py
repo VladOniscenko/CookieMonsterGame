@@ -7,6 +7,8 @@ import pygame
 from Classes.menu import *
 from Classes.rating import Rating
 from Classes.mini_game import *
+from functions import *
+
 
 class Game:
     def __init__(self):
@@ -29,8 +31,8 @@ class Game:
         self.difficulty = False
 
         # Styling
-        self.font = self.get_asset_path('Font', '8-BIT WONDER.TTF')
-        self.second_font = self.get_asset_path('Font', 'Miguel De Northern.ttf')
+        self.font = get_asset_path('Font', '8-BIT WONDER.TTF')
+        self.second_font = get_asset_path('Font', 'Miguel De Northern.ttf')
         self.BLACK, self.WHITE, self.BLUE, self.GREEN, self.RED, self.ORANGE = (0, 0, 0), (255, 255, 255), (0, 0, 128), (1, 50, 32), (139, 0, 0), (199, 110, 0)
 
         # Classes
@@ -129,33 +131,13 @@ class Game:
         self.start_time = int(time.time())
 
 
-    def get_asset_path(self, asset_type, name):
-        # For the deployed version (PyInstaller)
-        base_path = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
-
-        # If running in the development environment, use the current working directory
-        if not hasattr(sys, '_MEIPASS'):
-            assets_path = os.path.join(os.getcwd(), 'assets', asset_type)
-        else:
-            # If running as a bundled executable, use the _MEIPASS path
-            assets_path = os.path.join(base_path, 'assets', asset_type)
-
-        return os.path.join(assets_path, name)
-
     def get_background(self, name):
         # Use the helper function to get the correct path for the background
-        path = self.get_asset_path('Background', name)
+        path = get_asset_path('Background', name)
 
         # Load and scale the background image
         selected_image = pygame.image.load(path)
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
-
-    def get_image(self, name):
-        # Use the helper function to get the correct path for the image
-        path = self.get_asset_path('Other', name)
-
-        # Load the image
-        return pygame.image.load(path)
 
 
     def reset_game_mode(self):
