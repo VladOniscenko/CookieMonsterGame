@@ -18,7 +18,7 @@ class Menu:
         if 'color' in kwargs:
             color = kwargs['color']
 
-        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, color)
+        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, color=color)
 
 
     def blit_screen(self):
@@ -49,9 +49,9 @@ class MainMenu(Menu):
             self.game.display.fill(self.game.WHITE)
             self.game.display.blit(self.game.get_background('main.png'), (0, 0))
 
-            self.game.draw_text('Start', 20, self.playx, self.playy, self.game.BLACK)
-            self.game.draw_text('Scoreboard', 20, self.scoreboardx, self.scoreboardy, self.game.BLACK)
-            self.game.draw_text('Quit', 20, self.quitx, self.quity, self.game.BLACK)
+            self.game.draw_text('Start', 20, self.playx, self.playy, color=self.game.BLACK)
+            self.game.draw_text('Scoreboard', 20, self.scoreboardx, self.scoreboardy, color=self.game.BLACK)
+            self.game.draw_text('Quit', 20, self.quitx, self.quity, color=self.game.BLACK)
 
             self.draw_cursor()
             self.blit_screen()
