@@ -2,7 +2,7 @@ import sys
 import pygame
 
 class Menu:
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2
         self.option_offset = 40
@@ -13,7 +13,7 @@ class Menu:
         self.offset = -50
 
 
-    def draw_cursor(self, **kwargs):
+    def draw_cursor(self, **kwargs) -> None:
         color = self.game.BLACK
         if 'color' in kwargs:
             color = kwargs['color']
@@ -21,14 +21,14 @@ class Menu:
         self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, color=color)
 
 
-    def blit_screen(self):
+    def blit_screen(self) -> None:
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
 
 
 class MainMenu(Menu):
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         Menu.__init__(self, game)
         self.state = "Start"
         self.start_pos = 100
@@ -40,7 +40,7 @@ class MainMenu(Menu):
         self.cursor_rect.midtop = (self.start_pos + self.offset, self.playy)
 
 
-    def display_menu(self):
+    def display_menu(self) -> None:
         self.run_display = True
         while self.run_display:
             self.game.check_events()
@@ -57,7 +57,7 @@ class MainMenu(Menu):
             self.blit_screen()
 
 
-    def move_cursor(self):
+    def move_cursor(self) -> None:
         if self.game.DOWN_KEY:
             if self.state == "Start":
                 self.cursor_rect.midtop = (self.scoreboardx + self.offset, self.scoreboardy)
@@ -84,7 +84,7 @@ class MainMenu(Menu):
                 self.state = "Start"
 
 
-    def check_input(self):
+    def check_input(self) -> None:
         self.move_cursor()
 
         if self.game.START_KEY:
@@ -99,7 +99,7 @@ class MainMenu(Menu):
 
 
 class DifficultyMenu(Menu):
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         Menu.__init__(self, game)
         self.state = 'easy'
 
@@ -109,7 +109,7 @@ class DifficultyMenu(Menu):
         self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
 
-    def display_menu(self):
+    def display_menu(self) -> None:
         self.run_display = True
         while self.run_display:
             self.game.check_events()
@@ -126,7 +126,7 @@ class DifficultyMenu(Menu):
             self.blit_screen()
 
 
-    def move_cursor(self):
+    def move_cursor(self) -> None:
         if self.game.UP_KEY:
             if self.state == "easy":
                 self.state = 'hard'
@@ -149,7 +149,7 @@ class DifficultyMenu(Menu):
                 self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
 
-    def check_input(self):
+    def check_input(self) -> None:
         self.move_cursor()
         self.run_display = False
 
@@ -161,7 +161,7 @@ class DifficultyMenu(Menu):
 
 
 class MiniGameMenu(Menu):
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         Menu.__init__(self, game)
         self.state = 'rps'
 
@@ -171,7 +171,7 @@ class MiniGameMenu(Menu):
         self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
 
 
-    def display_menu(self):
+    def display_menu(self) -> None:
         self.run_display = True
         while self.run_display:
             self.game.check_events()
@@ -188,7 +188,7 @@ class MiniGameMenu(Menu):
             self.blit_screen()
 
 
-    def move_cursor(self):
+    def move_cursor(self) -> None:
         if self.game.UP_KEY:
             if self.state == 'rps':
                 self.state = 'binarize'
@@ -211,7 +211,7 @@ class MiniGameMenu(Menu):
                 self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
 
 
-    def check_input(self):
+    def check_input(self) -> None:
         # self.move_cursor() # todo enable if other games available
 
         if self.game.START_KEY:

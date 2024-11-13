@@ -1,5 +1,6 @@
 import pygame
 import csv
+from functions import *
 
 class Rating:
     def __init__(self, game):
@@ -38,7 +39,7 @@ class Rating:
         self.game.reset_keys()
 
     def get_scores(self):
-        with open(self.game.get_asset_path('Other', 'scoreboard.csv'), mode='r') as file:
+        with open(get_asset_path('Other', 'scoreboard.csv'), mode='r') as file:
             data = list(csv.reader(file))
         return sorted(data, key=lambda line: int(line[1]), reverse=True)[:11]
 

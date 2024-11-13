@@ -6,7 +6,7 @@ import pygame
 RPS_OPTIONS = ('rock', 'paper', 'scissors')
 
 class MainGame:
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W // 2, self.game.DISPLAY_H // 2
 
@@ -26,14 +26,14 @@ class MainGame:
         }
 
 
-    def configure(self):
+    def configure(self) -> None:
         self.reset_game()
         self.total_attempts = self.get_rule_value('total_attempts')
         self.title = self.get_rule_value('title')
         self.rules = self.get_rule_value('rules')
 
 
-    def reset_game(self):
+    def reset_game(self) -> None:
         self.total_attempts, self.attempt, self.correct, self.incorrect, self.title, self.rules = 0, 0, 0, 0, '', ''
 
 
@@ -44,13 +44,13 @@ class MainGame:
         return rule
 
 
-    def blit_screen(self):
+    def blit_screen(self) -> None:
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
 
 
-    def display_rules(self):
+    def display_rules(self) -> None:
         self.show_rules = True
         font_size = 30
         line_height = font_size + 5
@@ -73,7 +73,7 @@ class MainGame:
             self.blit_screen()
 
 
-    def split_text(self, text, font_size, max_width):
+    def split_text(self, text, font_size, max_width) -> str:
         """Breaks the text into multiple lines that fit within the given width."""
         font = pygame.font.Font(self.game.second_font, font_size)
         lines = []
@@ -137,7 +137,7 @@ class RPSGame(MainGame):
         }
 
 
-    def play(self):
+    def play(self) -> None:
         self.run_display = True
         self.display_rules()
 
@@ -151,7 +151,7 @@ class RPSGame(MainGame):
             self.display_result()
 
 
-    def did_user_win(self):
+    def did_user_win(self) -> None:
         self.total_attempts += 1
 
         if self.state == self.random_option:
@@ -167,7 +167,7 @@ class RPSGame(MainGame):
             self.incorrect += 1
 
 
-    def display_menu(self):
+    def display_menu(self) -> None:
         self.show_menu = True
         while self.show_menu:
             self.game.check_events()
@@ -181,7 +181,7 @@ class RPSGame(MainGame):
             self.blit_screen()
 
 
-    def display_result(self):
+    def display_result(self) -> None:
         self.display_animation()
 
         start_time = time.time()
@@ -199,13 +199,13 @@ class RPSGame(MainGame):
             self.blit_screen()
 
 
-    def display_score(self):
+    def display_score(self) -> None:
         self.game.draw_text(self.incorrect, 50, 15, 10, color=self.game.RED)
         self.game.draw_text(self.correct, 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
         self.game.draw_text(self.tie, 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
 
 
-    def display_animation(self):
+    def display_animation(self) -> None:
         start_time = time.time()
 
         cycles = 2
@@ -244,7 +244,7 @@ class RPSGame(MainGame):
             self.blit_screen()
 
 
-    def draw_options(self):
+    def draw_options(self) -> None:
         option = self.options[self.state]
         pygame.draw.rect(self.game.display, option.border_color, option.rect, option.border_width)
 
@@ -255,7 +255,7 @@ class RPSGame(MainGame):
         self.display_large_hands()
 
 
-    def move_cursor(self):
+    def move_cursor(self) -> None:
         # get index of user selected option of (rock, paper, scissors)
         current_index = RPS_OPTIONS.index(self.state)
 
@@ -267,19 +267,19 @@ class RPSGame(MainGame):
             self.state = RPS_OPTIONS[(current_index + 1) % len(RPS_OPTIONS)]
 
 
-    def check_input(self):
+    def check_input(self) -> None:
         self.move_cursor()
         if self.game.START_KEY:
             self.show_menu = False
 
 
-    def display_large_hands(self):
+    def display_large_hands(self) -> None:
         self.r_rock.draw()
         self.l_rock.draw()
 
 
 class Hand:
-    def __init__(self, game, hand_type, w, h, x, y, left_handed=False):
+    def __init__(self, game, hand_type, w, h, x, y, left_handed=False) -> None:
         if hand_type not in RPS_OPTIONS:
             raise ValueError('Hand type is not valid!')
 
@@ -296,5 +296,5 @@ class Hand:
         self.border_color = self.game.RED
         self.border_width = 5
 
-    def draw(self):
+    def draw(self) -> None:
         self.game.display.blit(self.img, self.rect)
