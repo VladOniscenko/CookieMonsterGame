@@ -3,23 +3,15 @@ import time
 
 import pygame
 
+RPS_OPTIONS = ('rock', 'paper', 'scissors')
 
 class MainGame:
     def __init__(self, game):
         self.game = game
         self.mid_w, self.mid_h = self.game.DISPLAY_W // 2, self.game.DISPLAY_H // 2
 
-        self.run_display = True
-        self.display_rules = True
-        self.running = False
-
-        self.total_attempts = 0
-        self.attempt = 0
-        self.correct = 0
-        self.incorrect = 0
-        self.tie = 0
-        self.title = ''
-        self.rules = ''
+        self.run_display, self.display_rules, self.running = True, True, False
+        self.total_attempts, self.attempt, self.correct, self.incorrect, self.tie, self.title, self.rules = 0, 0, 0, 0, 0, '', ''
 
         self.game_rules = {
             'rps': {
@@ -42,12 +34,7 @@ class MainGame:
 
 
     def reset_game(self):
-        self.total_attempts = 0
-        self.attempt = 0
-        self.correct = 0
-        self.incorrect = 0
-        self.title = ''
-        self.rules = ''
+        self.total_attempts, self.attempt, self.correct, self.incorrect, self.title, self.rules = 0, 0, 0, 0, '', ''
 
 
     def get_rule_value(self, column_name):
@@ -89,11 +76,10 @@ class MainGame:
     def split_text(self, text, font_size, max_width):
         """Breaks the text into multiple lines that fit within the given width."""
         font = pygame.font.Font(self.game.second_font, font_size)
-        words = text.split(' ')
         lines = []
         current_line = ''
 
-        for word in words:
+        for word in text.split(' '):
             # Create a test line to check the width
             test_line = f"{current_line} {word}".strip()
             test_surface = font.render(test_line, True, self.game.RED)
@@ -115,68 +101,40 @@ class MainGame:
 class RPSGame(MainGame):
     def __init__(self, game):
         MainGame.__init__(self, game)
-        self.win_condition = False
-        self.display_options = False
+        self.is_winner = False
+        self.show_menu = False
         self.state = 'paper'
-        self.options = ('rock', 'paper', 'scissors')
         self.random_option = False
-        self.display_animation = False
+        self.show_animation = False
 
-        # load images
-        self.rock_img = self.game.get_image('rock.png')
-        self.paper_img = self.game.get_image('paper.png')
-        self.scissors_img = self.game.get_image('scissors.png')
+        self.result_text = {
+            None: ('Tie', self.game.BLACK),
+            True: ('You Win', self.game.GREEN),
+            False: ('You Lose', self.game.RED)
+        }
 
-        self.l_rock_img = self.game.get_image('l_rock.png')
-        self.l_paper_img = self.game.get_image('l_paper.png')
-        self.l_scissors_img = self.game.get_image('l_scissors.png')
+        # small right options
+        sm_w, sm_h, gap = 150, 150, 175
+        self.s_rock = Hand(game, 'rock', sm_w, sm_h, (self.game.DISPLAY_W - sm_w) // 2 - gap, (self.game.DISPLAY_H - sm_w) // 2)
+        self.s_paper = Hand(game, 'paper', sm_w, sm_h, (self.game.DISPLAY_W - sm_w) // 2, (self.game.DISPLAY_H - sm_w) // 2)
+        self.s_scissors = Hand(game, 'scissors', sm_w, sm_h, (self.game.DISPLAY_W - sm_w) // 2 + gap, (self.game.DISPLAY_H - sm_w) // 2)
 
         # large right options
-        self.right_rock = pygame.transform.scale(self.rock_img, (500, 500))
-        self.right_rock_rect = pygame.Rect(self.game.DISPLAY_W - 400, self.mid_h // 2, 500, 500)
-        self.right_paper = pygame.transform.scale(self.paper_img, (500, 500))
-        self.right_paper_rect = pygame.Rect(self.game.DISPLAY_W - 450, self.mid_h // 2, 500, 500)
-        self.right_scissors = pygame.transform.scale(self.scissors_img, (500, 500))
-        self.right_scissors_rect = pygame.Rect(self.game.DISPLAY_W - 450, self.mid_h // 2, 500, 500)
+        lg_w, lg_h, h_pos = 500, 500, self.mid_h // 2
+        self.r_rock = Hand(game, 'rock', lg_w, lg_h, self.game.DISPLAY_W - 400, self.mid_h // 2)
+        self.r_paper = Hand(game, 'paper', lg_w, lg_h, self.game.DISPLAY_W - 450, self.mid_h // 2)
+        self.r_scissors = Hand(game, 'scissors', lg_w, lg_h, self.game.DISPLAY_W - 450, self.mid_h // 2)
 
         # large left options
-        self.left_rock = pygame.transform.scale(self.l_rock_img, (500, 500))
-        self.left_rock_rect = pygame.Rect(-100, self.mid_h // 2, 500, 500)
-        self.left_paper = pygame.transform.scale(self.l_paper_img, (500, 500))
-        self.left_paper_rect = pygame.Rect(-50, self.mid_h // 2, 500, 500)
-        self.left_scissors = pygame.transform.scale(self.l_scissors_img, (500, 500))
-        self.left_scissors_rect = pygame.Rect(-50, self.mid_h // 2, 500, 500)
+        self.l_rock = Hand(game, 'rock', lg_w, lg_h, -100, self.mid_h // 2, True)
+        self.l_paper = Hand(game, 'paper', lg_w, lg_h, -50, self.mid_h // 2, True)
+        self.l_scissors = Hand(game, 'scissors', lg_w, lg_h, -50, self.mid_h // 2, True)
 
-        # small options for selection
-        size = 150
-        self.rock = pygame.transform.scale(self.rock_img, (size, size))
-        self.paper = pygame.transform.scale(self.paper_img, (size, size))
-        self.scissors = pygame.transform.scale(self.scissors_img, (size, size))
-
-        gap = 175
-        self.rock_rect = pygame.Rect((self.game.DISPLAY_W - size) // 2 - gap, (self.game.DISPLAY_H - size) // 2, size, size)
-        self.paper_rect = pygame.Rect((self.game.DISPLAY_W - size) // 2, (self.game.DISPLAY_H - size) // 2, size, size)
-        self.scissors_rect = pygame.Rect((self.game.DISPLAY_W - size) // 2 + gap, (self.game.DISPLAY_H - size) // 2, size, size)
-
-        # selection border
-        self.border_color = self.game.RED
-        self.border_width = 5
-
-
-    def check_user_won(self):
-        self.total_attempts += 1
-
-        if self.state == self.random_option:
-            self.win_condition = None
-            self.tie += 1
-        elif (self.state == 'rock' and self.random_option == 'scissors') or \
-                (self.state == 'paper' and self.random_option == 'rock') or \
-                (self.state == 'scissors' and self.random_option == 'paper'):
-            self.win_condition = True
-            self.correct += 1
-        else:
-            self.win_condition = False
-            self.incorrect += 1
+        self.options = {
+            'paper': self.s_paper,'rock': self.s_rock,'scissors': self.s_scissors,
+            'r_paper': self.r_paper,'r_rock': self.r_rock,'r_scissors': self.r_scissors,
+            'l_paper': self.l_paper,'l_rock': self.l_rock,'l_scissors': self.l_scissors
+        }
 
 
     def play(self):
@@ -184,49 +142,94 @@ class RPSGame(MainGame):
         self.show_rules()
 
         while self.run_display:
-            self.game.display.fill(self.game.BLACK)
+            self.game.display.fill(self.game.WHITE)
 
-            self.random_option = random.choice(self.options)
-            self.show_options()
-            self.check_user_won()
-            
-            self.show_result()
+            self.random_option = random.choice(RPS_OPTIONS)
+            self.display_menu()
+            self.did_user_win()
+
+            self.display_result()
 
 
-    def show_options(self):
-        self.display_options = True
-        while self.display_options:
+    def did_user_win(self):
+        self.total_attempts += 1
+
+        if self.state == self.random_option:
+            self.is_winner = None
+            self.tie += 1
+        elif (self.state == 'rock' and self.random_option == 'scissors') or \
+                (self.state == 'paper' and self.random_option == 'rock') or \
+                (self.state == 'scissors' and self.random_option == 'paper'):
+            self.is_winner = True
+            self.correct += 1
+        else:
+            self.is_winner = False
+            self.incorrect += 1
+
+
+    def display_menu(self):
+        self.show_menu = True
+        while self.show_menu:
             self.game.check_events()
             self.check_input()
 
             self.game.display.fill(self.game.WHITE)
 
-            self.show_score()
+            self.display_score()
             self.draw_options()
 
             self.blit_screen()
 
 
-    def show_result(self):
-        self.display_animation = True
+    def display_result(self):
+        self.display_animation()
+
+        start_time = time.time()
+        while time.time() - start_time < 2:
+            self.game.display.fill(self.game.WHITE)
+
+            # display right large hand selected by user
+            user_selected = self.options[f'r_{self.state}']
+            self.game.display.blit(user_selected.img, user_selected.rect)
+
+            # display left large hand selected by game
+            game_selected = self.options[f'l_{self.random_option}']
+            self.game.display.blit(game_selected.img, game_selected.rect)
+
+            # Display result text
+            text, color = self.result_text[self.is_winner]
+            self.game.draw_text(text, 30, self.mid_w, self.mid_h, position='center', color=color)
+
+            self.blit_screen()
+
+
+    def display_score(self):
+        self.game.draw_text(str(self.incorrect), 50, 15, 10, color=self.game.RED)
+        self.game.draw_text(str(self.correct), 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
+        self.game.draw_text(str(self.tie), 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
+
+
+    def display_animation(self):
         start_time = time.time()
 
-        cycle_duration = 0.25
+        cycles = 2
         cycle_height = 250
+        cycle_duration = 0.25
 
-        original_left_y = self.left_rock_rect.y
-        original_right_y = self.right_rock_rect.y
+        original_left_y = self.l_rock.rect.y
+        original_right_y = self.r_rock.rect.y
 
         # Perform the animation
-        while self.display_animation:
+        self.show_animation = True
+        while self.show_animation:
             elapsed_time = time.time() - start_time
             cycle_phase = (elapsed_time % cycle_duration) / (cycle_duration / 2)
 
             # check if time is not done max 2 sec and reset to default
-            if elapsed_time > 2 * cycle_duration:
-                self.display_animation = False
-                self.left_rock_rect.y = original_left_y
-                self.right_rock_rect.y = original_right_y
+            if elapsed_time > cycles * cycle_duration:
+                self.show_animation = False
+                self.l_rock.rect.y = original_left_y
+                self.r_rock.rect.y = original_right_y
                 break
 
             # Calculate vertical offset based on cycle phase
@@ -236,90 +239,59 @@ class RPSGame(MainGame):
                 offset = int(cycle_height * (2 - cycle_phase))  # Moving down
 
             # Apply the offset to the rock positions
-            self.left_rock_rect.y = original_left_y - offset
-            self.right_rock_rect.y = original_right_y - offset
+            self.l_rock.rect.y = original_left_y - offset
+            self.r_rock.rect.y = original_right_y - offset
 
             # Render the updated positions
             self.game.display.fill(self.game.WHITE)
             self.show_large_hands()
             self.blit_screen()
 
-        start_time = time.time()
-        while time.time() - start_time < 2:
-            self.game.display.fill(self.game.WHITE)
-
-            if self.state == 'rock':
-                self.game.display.blit(self.right_rock, self.right_rock_rect)
-            elif self.state == 'paper':
-                self.game.display.blit(self.right_paper, self.right_paper_rect)
-            else:
-                self.game.display.blit(self.right_scissors, self.right_scissors_rect)
-
-            if self.random_option == 'rock':
-                self.game.display.blit(self.left_rock, self.left_rock_rect)
-            elif self.random_option == 'paper':
-                self.game.display.blit(self.left_paper, self.left_paper_rect)
-            else:
-                self.game.display.blit(self.left_scissors, self.left_scissors_rect)
-
-            # Display result text
-            if self.win_condition is None:
-                self.game.draw_text('Tie', 30, self.mid_w, self.mid_h, position='center')
-            elif self.win_condition:
-                self.game.draw_text('You Win', 30, self.mid_w, self.mid_h, position='center', color=self.game.GREEN)
-            else:
-                self.game.draw_text('You Lose', 30, self.mid_w, self.mid_h, position='center', color=self.game.RED)
-
-            self.blit_screen()
-
-
-    def show_score(self):
-        self.game.draw_text(str(self.incorrect), 50, 15, 10, color=self.game.RED)
-
-        self.game.draw_text(str(self.correct), 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
-
-        self.game.draw_text(str(self.tie), 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
-
 
     def draw_options(self):
-        if self.state == 'paper':
-            pygame.draw.rect(self.game.display, self.border_color, self.paper_rect, self.border_width)
-        elif self.state == 'rock':
-            pygame.draw.rect(self.game.display, self.border_color, self.rock_rect, self.border_width)
-        elif self.state == 'scissors':
-            pygame.draw.rect(self.game.display, self.border_color, self.scissors_rect, self.border_width)
+        option = self.options[self.state]
+        pygame.draw.rect(self.game.display, option.border_color, option.rect, option.border_width)
 
-        self.game.display.blit(self.rock, self.rock_rect)
-        self.game.display.blit(self.paper, self.paper_rect)
-        self.game.display.blit(self.scissors, self.scissors_rect)
+        self.game.display.blit(self.s_rock.img, self.s_rock.rect)
+        self.game.display.blit(self.s_paper.img, self.s_paper.rect)
+        self.game.display.blit(self.s_scissors.img, self.s_scissors.rect)
 
         self.show_large_hands()
 
 
     def move_cursor(self):
+        current_index = RPS_OPTIONS.index(self.state)
         if self.game.LEFT_KEY:
-            if self.state == 'paper':
-                self.state = 'rock'
-            elif self.state == 'rock':
-                self.state = 'scissors'
-            else:
-                self.state = 'paper'
+            self.state = RPS_OPTIONS[(current_index - 1) % len(RPS_OPTIONS)]
         elif self.game.RIGHT_KEY:
-            if self.state == 'paper':
-                self.state = 'scissors'
-            elif self.state == 'rock':
-                self.state = 'paper'
-            else:
-                self.state = 'rock'
+            self.state = RPS_OPTIONS[(current_index + 1) % len(RPS_OPTIONS)]
 
 
     def check_input(self):
         self.move_cursor()
-
         if self.game.START_KEY:
-            self.display_options = False
+            self.show_menu = False
 
 
     def show_large_hands(self):
-        self.game.display.blit(self.right_rock, self.right_rock_rect)
-        self.game.display.blit(self.left_rock, self.left_rock_rect)
+        self.game.display.blit(self.r_rock.img, self.r_rock.rect)
+        self.game.display.blit(self.l_rock.img, self.l_rock.rect)
+
+
+class Hand:
+    def __init__(self, game, hand_type, w, h, x, y, left_handed=False):
+        if hand_type not in RPS_OPTIONS:
+            raise ValueError('Hand type is not valid!')
+
+        self.game = game
+        self.type = hand_type
+        self.left_handed = left_handed
+        self.w, self.h, self.x, self.y = w, h, x, y
+
+        self.__loaded_img = self.game.get_image((f'{self.type}' if not self.left_handed else f'l_{self.type}') + '.png')
+        self.img = pygame.transform.scale(self.__loaded_img, (self.w, self.h))
+
+        self.rect = pygame.Rect(self.x, self.y, self.w, self.h)
+
+        self.border_color = self.game.RED
+        self.border_width = 5
