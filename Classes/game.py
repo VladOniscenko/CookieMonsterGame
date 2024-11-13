@@ -14,6 +14,13 @@ class Game:
     def __init__(self):
         pygame.init()
 
+        self.total_score = 0
+        self.guessed_characters = []
+        self.password = 'challenge'
+        self.pass_list = list(self.password)
+        self.total_games = 1
+        self.played_games = []
+
         # Game init settings
         self.WIDTH, self.HEIGHT = 1280, 720
         self.FPS = 60
@@ -60,6 +67,17 @@ class Game:
 
             # play the game
             self.cur_game.play()
+
+            # process after game
+            self.played_games.append(self.game_mode)
+
+            # if self.cur_game.is_winner:
+            #     self.t
+
+            # todo check if user won
+            # todo update total score
+            # todo show winning password characters
+            # todo exclude played game from list
 
             self.window.blit(self.display, (0,0))
             pygame.display.update()
