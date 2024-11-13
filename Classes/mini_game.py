@@ -102,7 +102,7 @@ class RPSGame(MainGame):
     def __init__(self, game):
         MainGame.__init__(self, game)
         self.is_winner = False
-        self.show_menu = False
+        self.user_selected = False
         self.state = 'paper'
         self.random_option = False
         self.show_animation = False
@@ -142,13 +142,18 @@ class RPSGame(MainGame):
         self.display_rules()
 
         while self.run_display:
+            self.user_selected = False
             self.game.display.fill(self.game.WHITE)
 
             self.random_option = random.choice(RPS_OPTIONS)
             self.display_menu()
-            self.did_user_win()
+            self.display_score()
 
-            self.display_result()
+            if self.user_selected:
+                self.did_user_win()
+                self.display_result()
+
+            self.blit_screen()
 
 
     def did_user_win(self) -> None:
@@ -168,17 +173,9 @@ class RPSGame(MainGame):
 
 
     def display_menu(self) -> None:
-        self.show_menu = True
-        while self.show_menu:
-            self.game.check_events()
-            self.check_input()
-
-            self.game.display.fill(self.game.WHITE)
-
-            self.display_score()
-            self.draw_options()
-
-            self.blit_screen()
+        self.game.check_events()
+        self.check_input()
+        self.draw_options()
 
 
     def display_result(self) -> None:
@@ -270,7 +267,7 @@ class RPSGame(MainGame):
     def check_input(self) -> None:
         self.move_cursor()
         if self.game.START_KEY:
-            self.show_menu = False
+            self.user_selected = self.state
 
 
     def display_large_hands(self) -> None:
