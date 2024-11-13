@@ -46,5 +46,5 @@ class Rating:
 
     def check_input(self):
         if self.game.BACK_KEY or self.game.ESC_KEY:
-            self.game.cur_menu = self.game.main_menu
+            self.game.main_menu.run_display = True
             self.run_display = False

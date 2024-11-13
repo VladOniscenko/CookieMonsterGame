@@ -150,15 +150,17 @@ class RPSGame(MainGame):
             self.display_score()
 
             if self.user_selected:
+                self.attempt += 1
                 self.did_user_win()
                 self.display_result()
+
+                if self.attempt == self.total_attempts or self.is_winner:
+                    self.run_display = False
 
             self.blit_screen()
 
 
     def did_user_win(self) -> None:
-        self.total_attempts += 1
-
         if self.state == self.random_option:
             self.is_winner = None
             self.tie += 1

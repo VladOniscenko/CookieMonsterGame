@@ -44,7 +44,6 @@ class Game:
         self.rps_game = RPSGame(self)
 
         self.cur_game = self.rps_game
-        self.cur_menu = self.main_menu
 
 
     def game_loop(self):
@@ -52,20 +51,15 @@ class Game:
             self.display.fill(self.WHITE)
             self.check_events()
 
-
             # select game
             self.reset_game_mode()
             self.mini_game_menu.display_menu()
 
-
             # set game rules, title, attempts etc.
             self.cur_game.configure()
+
+            # play the game
             self.cur_game.play()
-
-            # todo start mini game based on selection
-            # todo print game rules
-            # todo let user play the game
-
 
             self.window.blit(self.display, (0,0))
             pygame.display.update()

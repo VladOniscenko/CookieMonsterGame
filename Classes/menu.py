@@ -41,7 +41,6 @@ class MainMenu(Menu):
 
 
     def display_menu(self) -> None:
-        self.run_display = True
         while self.run_display:
             self.game.check_events()
             self.check_input()
@@ -89,7 +88,7 @@ class MainMenu(Menu):
 
         if self.game.START_KEY:
             if self.state == 'Start':
-                self.game.cur_menu = self.game.difficulties
+                self.game.difficulties.run_display = True
             elif self.state == 'Scoreboard':
                 self.game.rating.run_display = True
             elif self.state == 'Quit':
@@ -102,6 +101,7 @@ class DifficultyMenu(Menu):
     def __init__(self, game) -> None:
         Menu.__init__(self, game)
         self.state = 'easy'
+        self.run_display = False
 
         self.easyx, self.easyy = self.mid_w - 50, self.mid_h - 30
         self.mediumx, self.mediumy = self.mid_w - 50, self.easyy + self.option_offset
@@ -110,7 +110,6 @@ class DifficultyMenu(Menu):
 
 
     def display_menu(self) -> None:
-        self.run_display = True
         while self.run_display:
             self.game.check_events()
             self.check_input()
@@ -151,13 +150,16 @@ class DifficultyMenu(Menu):
 
     def check_input(self) -> None:
         self.move_cursor()
-        self.run_display = False
+
+        if self.game.START_KEY or self.game.BACK_KEY or self.game.ESC_KEY:
+            self.run_display = False
 
         if self.game.START_KEY:
             self.game.difficulty = self.state
             self.game.start_game()
         elif self.game.BACK_KEY or self.game.ESC_KEY:
-            self.game.cur_menu = self.game.main_menu
+            self.game.main_menu.run_display = True
+
 
 
 class MiniGameMenu(Menu):

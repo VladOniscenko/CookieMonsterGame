@@ -15,7 +15,10 @@ def main():
         clock.tick(g.FPS)
 
         # display selection menu
-        g.cur_menu.display_menu()
+        g.main_menu.display_menu()
+
+        # display selection menu
+        g.difficulties.display_menu()
 
         # display rating scoreboard
         g.rating.display_rating()
