@@ -34,7 +34,7 @@ class MainGame:
 
 
     def reset_game(self) -> None:
-        self.total_attempts, self.attempt, self.correct, self.incorrect, self.title, self.rules = 0, 0, 0, 0, '', ''
+        self.total_attempts, self.tie, self.attempt, self.correct, self.incorrect, self.title, self.rules = 0, 0, 0, 0, 0, '', ''
 
 
     def get_rule_value(self, column_name):
