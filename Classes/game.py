@@ -49,35 +49,40 @@ class Game:
         self.rating = Rating(self)
 
         self.rps_game = RPSGame(self)
-
-        self.cur_game = self.rps_game
+        self.hangman_game = HangmanGame(self)
+        self.cur_game = False
 
 
     def game_loop(self):
         while self.playing:
             self.display.fill(self.WHITE)
             self.check_events()
+            self.cur_game = False
 
             # select game
             self.mini_game_menu.display_menu()
 
-            # set game rules, title, attempts etc.
-            self.cur_game.configure()
+            if self.cur_game:
+                # set game rules, title, attempts etc.
+                self.cur_game.configure()
 
-            # play the game
-            self.cur_game.play()
+                # show rules
+                self.cur_game.display_rules()
 
-            # process after game
-            if self.game_mode not in  self.played_games:
-                self.played_games.append(self.game_mode)
+                # play the game
+                self.cur_game.play()
 
-            # if self.cur_game.is_winner:
-            #     self.t
+                # process after game
+                if self.game_mode not in self.played_games:
+                    self.played_games.append(self.game_mode)
 
-            # todo check if user won
-            # todo update total score
-            # todo show winning password characters
-            # todo exclude played game from list
+                # if self.cur_game.is_winner:
+                #     self.t
+
+                # todo check if user won
+                # todo update total score
+                # todo show winning password characters
+                # todo exclude played game from list
 
             self.window.blit(self.display, (0,0))
             pygame.display.update()
