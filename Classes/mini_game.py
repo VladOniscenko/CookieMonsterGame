@@ -22,6 +22,15 @@ class MainGame:
                     'medium': 2,
                     'hard': 1
                 }
+            },
+            'hangman': {
+                'title': 'Hangman',
+                'rules': "In Hangman, one player chooses a word, and the others guess letters to reveal it. Correct guesses fill in blanks, while wrong guesses bring the hangman closer to completion. The goal: guess the word before the drawing is finished!",
+                'total_attempts': {
+                    'easy': ['cat', 'book', 'tree', 'dog', 'fish'],
+                    'medium': ['planet', 'guitar', 'ocean', 'jungle', 'basket'],
+                    'hard': ['microscope', 'astronomy', 'philosophy', 'quadrilateral', 'hypothesis']
+                }
             }
         }
 
@@ -139,8 +148,6 @@ class RPSGame(MainGame):
 
     def play(self) -> None:
         self.run_display = True
-        self.display_rules()
-
         while self.run_display:
             self.user_selected = False
             self.game.display.fill(self.game.WHITE)
@@ -297,3 +304,57 @@ class Hand:
 
     def draw(self) -> None:
         self.game.display.blit(self.img, self.rect)
+
+
+class HangmanGame(MainGame):
+    def __init__(self, game):
+        MainGame.__init__(self, game)
+        self.is_winner = False
+        self.user_selected = False
+        self.state = False
+
+
+    def play(self) -> None:
+        self.run_display = True
+        while self.run_display:
+            self.user_selected = False
+            self.game.display.fill(self.game.WHITE)
+
+
+
+
+
+
+
+
+
+            self.blit_screen()
+
+
+    def did_user_win(self) -> None:
+        return False
+
+
+    def display_menu(self) -> None:
+        pass
+
+    def display_result(self) -> None:
+        pass
+
+
+    def display_score(self) -> None:
+        pass
+
+
+    def draw_options(self) -> None:
+        pass
+
+
+    def move_cursor(self) -> None:
+        pass
+
+
+    def check_input(self) -> None:
+        self.move_cursor()
+        if self.game.START_KEY:
+            self.user_selected = self.state
