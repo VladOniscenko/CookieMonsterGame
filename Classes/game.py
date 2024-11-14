@@ -59,7 +59,6 @@ class Game:
             self.check_events()
 
             # select game
-            self.reset_game_mode()
             self.mini_game_menu.display_menu()
 
             # set game rules, title, attempts etc.
@@ -69,7 +68,8 @@ class Game:
             self.cur_game.play()
 
             # process after game
-            self.played_games.append(self.game_mode)
+            if self.game_mode not in  self.played_games:
+                self.played_games.append(self.game_mode)
 
             # if self.cur_game.is_winner:
             #     self.t
@@ -118,11 +118,11 @@ class Game:
             text = str(text)
 
         color = self.BLACK
-        if 'color' in kwargs:
+        if 'color' in kwargs and kwargs['color']:
             color = kwargs['color']
 
         selected_font = self.font
-        if 'font' in kwargs:
+        if 'font' in kwargs and kwargs['font']:
             selected_font = kwargs['font']
         font = pygame.font.Font(selected_font, size)
 
@@ -150,7 +150,3 @@ class Game:
         # Load and scale the background image
         selected_image = pygame.image.load(path)
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
-
-
-    def reset_game_mode(self):
-        self.game_mode = False
