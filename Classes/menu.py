@@ -227,9 +227,9 @@ class MiniGameMenu(Menu):
             self.game.game_mode = self.state
 
             # todo set more games up
-            # if self.state == 'rps':
-            #     self.game.cur_game = self.game.rps_game
-
-            # todo disable this later if more games available
-            self.state = 'rps'
-            self.game.cur_game = self.game.rps_game
+            if self.state == 'rps':
+                self.game.cur_game = self.game.rps_game
+            elif self.state == 'hangman':
+                self.game.cur_game = self.game.hangman_game
+            else:
+                raise ValueError('State not valid!')
