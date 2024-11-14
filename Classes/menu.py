@@ -165,6 +165,9 @@ class DifficultyMenu(Menu):
 class MiniGameMenu(Menu):
     def __init__(self, game) -> None:
         Menu.__init__(self, game)
+        self.binarize_color = None
+        self.hangman_color = None
+        self.rps_color = None
         self.state = 'rps'
 
         self.rpsx, self.rpsy = self.mid_w - 100, self.mid_h - 150
@@ -180,11 +183,14 @@ class MiniGameMenu(Menu):
             self.check_input()
 
             self.game.display.fill(self.game.WHITE)
+            self.rps_color = False if 'rps' not in self.game.played_games else self.game.RED
+            self.hangman_color = False if 'hangman' not in self.game.played_games else self.game.RED
+            self.binarize_color = False if 'binarize' not in self.game.played_games else self.game.RED
 
             self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center')
-            self.game.draw_text('Rock Paper Scissors', 20, self.rpsx, self.rpsy)
-            self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany, color=self.game.RED)
-            self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey, color=self.game.RED)
+            self.game.draw_text('Rock Paper Scissors', 20, self.rpsx, self.rpsy, color=self.rps_color)
+            self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany, color=self.hangman_color)
+            self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey, color=self.binarize_color)
 
             self.draw_cursor(color=self.game.BLACK)
             self.blit_screen()
@@ -214,9 +220,9 @@ class MiniGameMenu(Menu):
 
 
     def check_input(self) -> None:
-        # self.move_cursor() # todo enable if other games available
+        self.move_cursor()
 
-        if self.game.START_KEY:
+        if self.game.START_KEY and self.state not in self.game.played_games:
             self.run_display = False
             self.game.game_mode = self.state
 
@@ -225,4 +231,5 @@ class MiniGameMenu(Menu):
             #     self.game.cur_game = self.game.rps_game
 
             # todo disable this later if more games available
+            self.state = 'rps'
             self.game.cur_game = self.game.rps_game
