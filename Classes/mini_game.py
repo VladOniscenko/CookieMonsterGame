@@ -63,7 +63,7 @@ class MainGame:
         self.show_rules = True
         font_size = 30
         line_height = font_size + 5
-        lines = self.split_text(self.rules, font_size, self.mid_w)
+        lines = split_text(self.rules, self.game.second_font, font_size, self.mid_w)
 
         while self.show_rules:
             self.game.check_events()
@@ -80,31 +80,6 @@ class MainGame:
             self.game.draw_text('PRESS ENTER TO PLAY >>', font_size, self.mid_w, self.mid_h + 200, font=self.game.second_font, position='center', color=self.game.RED)
 
             self.blit_screen()
-
-
-    def split_text(self, text, font_size, max_width) -> str:
-        """Breaks the text into multiple lines that fit within the given width."""
-        font = pygame.font.Font(self.game.second_font, font_size)
-        lines = []
-        current_line = ''
-
-        for word in text.split(' '):
-            # Create a test line to check the width
-            test_line = f"{current_line} {word}".strip()
-            test_surface = font.render(test_line, True, self.game.RED)
-
-            # If the line exceeds the max width, push the current line to lines and start a new one
-            if test_surface.get_width() <= max_width:
-                current_line = test_line
-            else:
-                lines.append(current_line)
-                current_line = word
-
-        # Add the last line
-        if current_line:
-            lines.append(current_line)
-
-        return lines
 
 
 class RPSGame(MainGame):
