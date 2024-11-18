@@ -2,6 +2,7 @@ import random
 import time
 from functions import *
 import pygame
+from dataclasses import dataclass
 
 RPS_OPTIONS = ('rock', 'paper', 'scissors')
 
@@ -281,13 +282,29 @@ class Hand:
         self.game.display.blit(self.img, self.rect)
 
 
+@dataclass
+class Alphabet:
+    name: str
+    x: int
+    y: int
+    h: int
+    w: int
+    is_used: bool = False
+
+
 class HangmanGame(MainGame):
     def __init__(self, game):
         MainGame.__init__(self, game)
         self.is_winner = False
         self.user_selected = False
         self.state = False
+        self.alphabet_objects = []
+        self.used_options = []
 
+        x, y = 20, 20
+        for letter in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']:
+            self.alphabet_objects.append(Alphabet(name=letter.upper(), x=x, y=y, h=35, w=35))
+            x += 30
 
     def play(self) -> None:
         self.run_display = True
@@ -295,11 +312,7 @@ class HangmanGame(MainGame):
             self.user_selected = False
             self.game.display.fill(self.game.WHITE)
 
-
-
-
-
-
+            self.draw_options()
 
 
 
@@ -322,7 +335,21 @@ class HangmanGame(MainGame):
 
 
     def draw_options(self) -> None:
-        pass
+
+        rect_x, rect_y, rect_width, rect_height = 50, self.game.DISPLAY_H - 90, 40, 40
+        step = (self.game.DISPLAY_W - (len(self.alphabet_objects) * 3.5)) / len(self.alphabet_objects)
+
+        for obj in self.alphabet_objects:
+            color = self.game.BLACK
+            if obj.name in self.used_options:
+                color = self.game.RED
+
+            self.game.draw_text(obj.name, 24, (rect_x + rect_width // 2) + 2, (rect_y + rect_height // 2) - 2.5,
+                                position='center', color=color)
+            rect_x += step
+
+
+        self.blit_screen()
 
 
     def move_cursor(self) -> None:
