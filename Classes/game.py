@@ -163,18 +163,24 @@ class Game:
 
     import pygame
 
-    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume = 0.1):
+    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume = 0.1, play = True):
         # Initialize a new mixer instance
         pygame.mixer.quit()  # Ensure no conflicts with existing mixer
         pygame.mixer.init()
 
         try:
             path = get_asset_path('Sound', file_path)
+            if not path:
+                raise FileNotFoundError(f"Asset path not found for {file_path}")
+
             pygame.mixer.music.load(path)  # Load the music file
             pygame.mixer.music.set_volume(volume)  # Set default volume
             pygame.mixer.music.play(loops, start, fade)  # Play the music
+
+            if not play:
+                pygame.mixer.music.pause()
+
         except Exception as e:
             print(f"Error: {e}")
 
         return pygame.mixer
-
