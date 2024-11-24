@@ -299,7 +299,7 @@ class HangmanGame(MainGame):
         self.is_winner = False
         self.user_selected = False
         self.state = False
-        self.word = 'challenge'
+        self.word = None
         self.alphabet_objects = []
         self.used_options = []
 
@@ -309,6 +309,7 @@ class HangmanGame(MainGame):
             x += 30
 
     def play(self) -> None:
+        self.word = self.get_random_word(self.game.difficulty)
         self.run_display = True
         while self.run_display:
             self.user_selected = False
@@ -317,6 +318,8 @@ class HangmanGame(MainGame):
             self.game.draw_text('Gues the word', 40, self.mid_w, 75, position='center')
 
             self.draw_gallows()
+
+            self.draw_word_lines()
 
             self.draw_options()
 
@@ -397,3 +400,28 @@ class HangmanGame(MainGame):
 
         if self.wrong_attempts >= 6:
             draw_slanted_line(self.game.display, (657, 400), (50, 50), 7, self.game.RED)  # Right leg
+
+
+    def draw_word_lines(self):
+        word = self.word
+        display = self.game.display
+        dw, dh = self.game.DISPLAY_W, self.game.DISPLAY_H
+
+        line_length = 50
+        space_between_lines = 15
+        start_x = dw // 2 - (len(word) * (line_length + space_between_lines)) // 2
+        start_y = 575
+
+        # Draw lines for each letter in the word
+        for i in range(len(word)):
+            pygame.draw.line(display, self.game.WHITE, (start_x + i * (line_length + space_between_lines), start_y),
+                             (start_x + i * (line_length + space_between_lines) + line_length, start_y), 3)
+
+    def get_random_word(self, difficulty):
+        words = {
+            'easy': ['cat', 'dog', 'hat', 'sun', 'ball'],
+            'medium': ['jungle', 'monkey', 'puzzle', 'bridge', 'shadow'],
+            'hard': ['pneumonia', 'subterranean', 'juxtaposition', 'xylophone', 'quizzical'],
+        }
+        return random.choice(words[difficulty])
+
