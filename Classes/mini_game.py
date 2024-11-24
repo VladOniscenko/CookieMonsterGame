@@ -419,9 +419,9 @@ class HangmanGame(MainGame):
 
     def get_random_word(self, difficulty):
         words = {
-            'easy': ['cat', 'dog', 'hat', 'sun', 'ball'],
-            'medium': ['jungle', 'monkey', 'puzzle', 'bridge', 'shadow'],
-            'hard': ['pneumonia', 'subterranean', 'juxtaposition', 'xylophone', 'quizzical'],
+            'easy': ['cat', 'dog', 'hat', 'sun', 'ball', 'apple', 'tree', 'star', 'fish', 'moon'],
+            'medium': ['jungle', 'monkey', 'puzzle', 'bridge', 'shadow', 'river', 'ocean', 'laptop', 'forest', 'mountain'],
+            'hard': ['pneumonia', 'subterranean', 'juxtaposition', 'xylophone', 'quizzical', 'antidisestablishmentarianism', 'cryptography', 'neuroplasticity', 'photosynthesis','hippopotomonstrosesquipedaliophobia'],
         }
         return random.choice(words[difficulty])
 
