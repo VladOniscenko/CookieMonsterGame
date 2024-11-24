@@ -3,6 +3,9 @@ from os.path import join, abspath
 import os
 
 import pygame
+from pygame.examples.music_drop_fade import volume
+
+pygame.mixer.init()
 
 from Classes.menu import *
 from Classes.rating import Rating
@@ -36,6 +39,7 @@ class Game:
 
         self.game_mode = False
         self.difficulty = False
+        self.main_sound = self.play_music('main.wav', 99, 90, 20)
 
         # Styling
         self.font = get_asset_path('Font', '8-BIT WONDER.TTF')
@@ -53,6 +57,9 @@ class Game:
         self.cur_game = False
 
     def game_loop(self):
+        # stop playing any music
+        self.main_sound.music.pause()
+
         while self.playing:
             self.display.fill(self.WHITE)
             self.check_events()
@@ -113,6 +120,7 @@ class Game:
                 if pygame.K_a <= event.key <= pygame.K_z:
                     self.OTHER_KEY.append(chr(event.key).lower())
 
+
     def reset_keys(self):
         self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
 
@@ -152,3 +160,21 @@ class Game:
         # Load and scale the background image
         selected_image = pygame.image.load(path)
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
+
+    import pygame
+
+    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume = 0.1):
+        # Initialize a new mixer instance
+        pygame.mixer.quit()  # Ensure no conflicts with existing mixer
+        pygame.mixer.init()
+
+        try:
+            path = get_asset_path('Sound', file_path)
+            pygame.mixer.music.load(path)  # Load the music file
+            pygame.mixer.music.set_volume(volume)  # Set default volume
+            pygame.mixer.music.play(loops, start, fade)  # Play the music
+        except Exception as e:
+            print(f"Error: {e}")
+
+        return pygame.mixer
+
