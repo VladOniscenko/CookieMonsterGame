@@ -51,3 +51,18 @@ def split_text(text, font, font_size, max_width) -> str:
         lines.append(current_line)
 
     return lines
+
+
+def draw_circle(display, center, radius, thickness, color):
+    """Draw a circle."""
+    pygame.draw.circle(display, color, center, radius, thickness)
+
+
+def draw_vertical_line(display, start, length, thickness, color):
+    """Draw a vertical line."""
+    pygame.draw.line(display,color,start,(start[0], start[1] + length), thickness)
+
+
+def draw_slanted_line(display, start, offset, thickness, color):
+    """Draw a slanted line."""
+    pygame.draw.line(display,color,start,(start[0] + offset[0], start[1] + offset[1]), thickness)
