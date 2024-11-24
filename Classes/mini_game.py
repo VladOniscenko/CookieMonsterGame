@@ -295,9 +295,11 @@ class Alphabet:
 class HangmanGame(MainGame):
     def __init__(self, game):
         MainGame.__init__(self, game)
+        self.wrong_attempts = 0
         self.is_winner = False
         self.user_selected = False
         self.state = False
+        self.word = 'challenge'
         self.alphabet_objects = []
         self.used_options = []
 
@@ -312,7 +314,7 @@ class HangmanGame(MainGame):
             self.user_selected = False
 
             self.game.display.fill(self.game.WHITE)
-            self.game.draw_text('Make a choice', 40, self.mid_w, 75, position='center')
+            self.game.draw_text('Gues the word', 40, self.mid_w, 75, position='center')
 
             self.draw_gallows()
 
@@ -328,6 +330,7 @@ class HangmanGame(MainGame):
     def display_menu(self) -> None:
         pass
 
+
     def display_result(self) -> None:
         pass
 
@@ -342,7 +345,7 @@ class HangmanGame(MainGame):
         step = (self.game.DISPLAY_W - (len(self.alphabet_objects) * 3.5)) / len(self.alphabet_objects)
 
         for obj in self.alphabet_objects:
-            color = self.game.BLACK
+            color = self.game.WHITE
             if obj.name in self.used_options:
                 color = self.game.RED
 
@@ -363,20 +366,34 @@ class HangmanGame(MainGame):
         if self.game.START_KEY:
             self.user_selected = self.state
 
+
     def draw_gallows(self):
-        # horizontal bottom line
-        pygame.draw.rect(self.game.display, self.game.BLACK,
-                         (350, self.game.DISPLAY_H - 250, self.game.DISPLAY_W - 650, 10))
+        display = self.game.display
+        black = self.game.BLACK
+        dw, dh = self.game.DISPLAY_W, self.game.DISPLAY_H
 
-        # vertical right long line
-        pygame.draw.rect(self.game.display, self.game.BLACK, (self.game.DISPLAY_W - 475, 200, 15, 275))
+        # Draw base structure
+        pygame.draw.rect(display, black, (0, dh - 250, dw, dh))  # Horizontal bottom line
+        pygame.draw.rect(display, black, (dw - 475, 200, 15, 275))  # Vertical right long line
+        pygame.draw.line(display, black, (750, dh - 525), (810, dh - 450), 15)  # Slanted line
+        pygame.draw.rect(display, black, (650, dh - 525, 170, 10))  # Horizontal top line
+        pygame.draw.rect(display, black, (650, 200, 15, 50))  # Vertical top line
 
-        # horizontal top line
-        pygame.draw.rect(self.game.display, self.game.BLACK, (650, self.game.DISPLAY_H - 525, 170, 10))
+        # Draw hangman parts incrementally
+        if self.wrong_attempts >= 1:
+            draw_circle(self.game.display, (657, 275), 25, 5, self.game.RED)  # Head
 
-        # vertical top line
-        pygame.draw.rect(self.game.display, self.game.BLACK, (650, 200, 15, 50))
+        if self.wrong_attempts >= 2:
+            draw_vertical_line(self.game.display, (657, 300), 100, 5, self.game.RED)  # Body
 
-        # slanted line
-        pygame.draw.line(self.game.display, self.game.BLACK, (750, self.game.DISPLAY_H - 525), (810, self.game.DISPLAY_H - 450), 15)
+        if self.wrong_attempts >= 3:
+            draw_slanted_line(self.game.display, (657, 315), (-50, 50), 7, self.game.RED)  # Left arm
 
+        if self.wrong_attempts >= 4:
+            draw_slanted_line(self.game.display, (657, 315), (50, 50), 7, self.game.RED)  # Right arm
+
+        if self.wrong_attempts >= 5:
+            draw_slanted_line(self.game.display, (657, 400), (-50, 50), 7, self.game.RED)  # Left leg
+
+        if self.wrong_attempts >= 6:
+            draw_slanted_line(self.game.display, (657, 400), (50, 50), 7, self.game.RED)  # Right leg
