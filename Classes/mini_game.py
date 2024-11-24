@@ -310,11 +310,13 @@ class HangmanGame(MainGame):
         self.run_display = True
         while self.run_display:
             self.user_selected = False
+
             self.game.display.fill(self.game.WHITE)
+            self.game.draw_text('Make a choice', 40, self.mid_w, 75, position='center')
+
+            self.draw_gallows()
 
             self.draw_options()
-
-
 
             self.blit_screen()
 
@@ -360,3 +362,21 @@ class HangmanGame(MainGame):
         self.move_cursor()
         if self.game.START_KEY:
             self.user_selected = self.state
+
+    def draw_gallows(self):
+        # horizontal bottom line
+        pygame.draw.rect(self.game.display, self.game.BLACK,
+                         (350, self.game.DISPLAY_H - 250, self.game.DISPLAY_W - 650, 10))
+
+        # vertical right long line
+        pygame.draw.rect(self.game.display, self.game.BLACK, (self.game.DISPLAY_W - 475, 200, 15, 275))
+
+        # horizontal top line
+        pygame.draw.rect(self.game.display, self.game.BLACK, (650, self.game.DISPLAY_H - 525, 170, 10))
+
+        # vertical top line
+        pygame.draw.rect(self.game.display, self.game.BLACK, (650, 200, 15, 50))
+
+        # slanted line
+        pygame.draw.line(self.game.display, self.game.BLACK, (750, self.game.DISPLAY_H - 525), (810, self.game.DISPLAY_H - 450), 15)
+
