@@ -300,27 +300,28 @@ class HangmanGame(MainGame):
         while self.run_display:
             self.check_input()
             self.game.display.fill(self.game.WHITE)
-            self.game.draw_text('Gues the word', 40, self.mid_w, 75, position='center')
+            self.game.draw_text('Gues the word or he will die', 30, self.mid_w, 75, position='center', color=self.game.RED)
 
             self.draw_gallows()
             self.draw_word_lines()
             self.draw_options()
+
             self.blit_screen()
+
             self.did_user_win()
 
     def did_user_win(self) -> None:
-        # self.run_display = False
-        pass
-        # return False
+        if self.incorrect >= 6:
+            self.run_display = False
+            self.is_winner = False
+            return
 
-    def display_menu(self) -> None:
-        pass
+        for char in self.word:
+            if not self.alphabet_objects[char].is_guessed:
+                return
 
-    def display_result(self) -> None:
-        pass
-
-    def display_score(self) -> None:
-        pass
+        self.run_display = False
+        self.is_winner = True
 
     def draw_options(self) -> None:
 
