@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 RPS_OPTIONS = ('rock', 'paper', 'scissors')
 
+
 class MainGame:
     def __init__(self, game) -> None:
         self.game = game
@@ -35,17 +36,14 @@ class MainGame:
             }
         }
 
-
     def configure(self) -> None:
         self.reset_game()
         self.total_attempts = self.get_rule_value('total_attempts')
         self.title = self.get_rule_value('title')
         self.rules = self.get_rule_value('rules')
 
-
     def reset_game(self) -> None:
         self.total_attempts, self.tie, self.attempt, self.correct, self.incorrect, self.title, self.rules = 0, 0, 0, 0, 0, '', ''
-
 
     def get_rule_value(self, column_name):
         rule = self.game_rules.get(self.game.game_mode, {}).get(column_name)
@@ -53,12 +51,10 @@ class MainGame:
             return rule.get(self.game.difficulty, 1)
         return rule
 
-
     def blit_screen(self) -> None:
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
-
 
     def display_rules(self) -> None:
         self.show_rules = True
@@ -121,7 +117,6 @@ class RPSGame(MainGame):
             'l_paper': self.l_paper,'l_rock': self.l_rock,'l_scissors': self.l_scissors
         }
 
-
     def play(self) -> None:
         self.run_display = True
         while self.run_display:
@@ -142,7 +137,6 @@ class RPSGame(MainGame):
 
             self.blit_screen()
 
-
     def did_user_win(self) -> None:
         if self.state == self.random_option:
             self.is_winner = None
@@ -156,12 +150,10 @@ class RPSGame(MainGame):
             self.is_winner = False
             self.incorrect += 1
 
-
     def display_menu(self) -> None:
         self.game.check_events()
         self.check_input()
         self.draw_options()
-
 
     def display_result(self) -> None:
         self.display_animation()
@@ -180,12 +172,10 @@ class RPSGame(MainGame):
 
             self.blit_screen()
 
-
     def display_score(self) -> None:
         self.game.draw_text(self.incorrect, 50, 15, 10, color=self.game.RED)
         self.game.draw_text(self.correct, 50, self.game.DISPLAY_W - 15, 10, color=self.game.GREEN, position='topright')
         self.game.draw_text(self.tie, 50, self.game.DISPLAY_W // 2, 40, color=self.game.ORANGE, position='center')
-
 
     def display_animation(self) -> None:
         start_time = time.time()
@@ -225,7 +215,6 @@ class RPSGame(MainGame):
             self.display_large_hands()
             self.blit_screen()
 
-
     def draw_options(self) -> None:
         option = self.options[self.state]
         pygame.draw.rect(self.game.display, option.border_color, option.rect, option.border_width)
@@ -235,7 +224,6 @@ class RPSGame(MainGame):
         self.s_scissors.draw()
 
         self.display_large_hands()
-
 
     def move_cursor(self) -> None:
         # get index of user selected option of (rock, paper, scissors)
@@ -248,12 +236,10 @@ class RPSGame(MainGame):
         elif self.game.RIGHT_KEY:
             self.state = RPS_OPTIONS[(current_index + 1) % len(RPS_OPTIONS)]
 
-
     def check_input(self) -> None:
         self.move_cursor()
         if self.game.START_KEY:
             self.user_selected = self.state
-
 
     def display_large_hands(self) -> None:
         self.r_rock.draw()
@@ -290,85 +276,80 @@ class Alphabet:
     h: int
     w: int
     is_used: bool = False
+    is_guessed: bool = False
 
 
 class HangmanGame(MainGame):
     def __init__(self, game):
         MainGame.__init__(self, game)
-        self.wrong_attempts = 0
         self.is_winner = False
-        self.user_selected = False
         self.state = False
         self.word = None
-        self.alphabet_objects = []
+        self.alphabet_objects = {}
         self.used_options = []
+        self.alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
         x, y = 20, 20
-        for letter in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']:
-            self.alphabet_objects.append(Alphabet(name=letter.upper(), x=x, y=y, h=35, w=35))
+        for letter in self.alphabet:
+            self.alphabet_objects[letter] = Alphabet(name=letter.upper(), x=x, y=y, h=35, w=35)
             x += 30
 
     def play(self) -> None:
         self.word = self.get_random_word(self.game.difficulty)
         self.run_display = True
         while self.run_display:
-            self.user_selected = False
-
+            self.check_input()
             self.game.display.fill(self.game.WHITE)
             self.game.draw_text('Gues the word', 40, self.mid_w, 75, position='center')
 
             self.draw_gallows()
-
             self.draw_word_lines()
-
             self.draw_options()
-
             self.blit_screen()
-
+            self.did_user_win()
 
     def did_user_win(self) -> None:
-        return False
-
+        # self.run_display = False
+        pass
+        # return False
 
     def display_menu(self) -> None:
         pass
 
-
     def display_result(self) -> None:
         pass
 
-
     def display_score(self) -> None:
         pass
-
 
     def draw_options(self) -> None:
 
         rect_x, rect_y, rect_width, rect_height = 50, self.game.DISPLAY_H - 90, 40, 40
         step = (self.game.DISPLAY_W - (len(self.alphabet_objects) * 3.5)) / len(self.alphabet_objects)
 
-        for obj in self.alphabet_objects:
+        for char in self.alphabet_objects.values():
             color = self.game.WHITE
-            if obj.name in self.used_options:
+            if char.is_used:
                 color = self.game.RED
 
-            self.game.draw_text(obj.name, 24, (rect_x + rect_width // 2) + 2, (rect_y + rect_height // 2) - 2.5,
+            self.game.draw_text(char.name, 24, (rect_x + rect_width // 2) + 2, (rect_y + rect_height // 2) - 2.5,
                                 position='center', color=color)
             rect_x += step
 
-
         self.blit_screen()
 
-
-    def move_cursor(self) -> None:
-        pass
-
-
     def check_input(self) -> None:
-        self.move_cursor()
-        if self.game.START_KEY:
-            self.user_selected = self.state
+        self.game.check_events()
 
+        for char in self.game.OTHER_KEY:
+            if char in self.alphabet_objects and not self.alphabet_objects[char].is_used:
+                self.alphabet_objects[char].is_used = True
+
+                if char in self.word:
+                    self.alphabet_objects[char].is_guessed = True
+
+                if char not in self.word:
+                    self.incorrect += 1
 
     def draw_gallows(self):
         display = self.game.display
@@ -383,39 +364,53 @@ class HangmanGame(MainGame):
         pygame.draw.rect(display, black, (650, 200, 15, 50))  # Vertical top line
 
         # Draw hangman parts incrementally
-        if self.wrong_attempts >= 1:
+        if self.incorrect >= 1:
             draw_circle(self.game.display, (657, 275), 25, 5, self.game.RED)  # Head
 
-        if self.wrong_attempts >= 2:
+        if self.incorrect >= 2:
             draw_vertical_line(self.game.display, (657, 300), 100, 5, self.game.RED)  # Body
 
-        if self.wrong_attempts >= 3:
+        if self.incorrect >= 3:
             draw_slanted_line(self.game.display, (657, 315), (-50, 50), 7, self.game.RED)  # Left arm
 
-        if self.wrong_attempts >= 4:
+        if self.incorrect >= 4:
             draw_slanted_line(self.game.display, (657, 315), (50, 50), 7, self.game.RED)  # Right arm
 
-        if self.wrong_attempts >= 5:
+        if self.incorrect >= 5:
             draw_slanted_line(self.game.display, (657, 400), (-50, 50), 7, self.game.RED)  # Left leg
 
-        if self.wrong_attempts >= 6:
+        if self.incorrect >= 6:
             draw_slanted_line(self.game.display, (657, 400), (50, 50), 7, self.game.RED)  # Right leg
-
 
     def draw_word_lines(self):
         word = self.word
         display = self.game.display
         dw, dh = self.game.DISPLAY_W, self.game.DISPLAY_H
 
-        line_length = 50
+        line_length = 60
         space_between_lines = 15
         start_x = dw // 2 - (len(word) * (line_length + space_between_lines)) // 2
         start_y = 575
+        f_size = 40
 
         # Draw lines for each letter in the word
-        for i in range(len(word)):
-            pygame.draw.line(display, self.game.WHITE, (start_x + i * (line_length + space_between_lines), start_y),
+        for i, char in enumerate(word):
+            # Get the corresponding alphabet object for the character
+            char_obj = self.alphabet_objects[char]
+
+            # Draw the line for the current character (even if it's not guessed yet)
+            pygame.draw.line(display, self.game.WHITE,
+                             (start_x + i * (line_length + space_between_lines), start_y),
                              (start_x + i * (line_length + space_between_lines) + line_length, start_y), 3)
+
+            # If the character has been guessed, display it
+            if char_obj.is_guessed:
+                # Calculate the width of the character to center it on the line
+                font = pygame.font.Font(self.game.font, f_size)
+                char_width, char_height = font.size(char)  # Get both width and height
+                # Calculate the x-coordinate to center the text
+                char_x = start_x + i * (line_length + space_between_lines) + (line_length - char_width) // 2
+                self.game.draw_text(char, f_size, char_x, start_y - 50, color=self.game.WHITE, position='topleft')
 
     def get_random_word(self, difficulty):
         words = {

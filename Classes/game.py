@@ -32,7 +32,7 @@ class Game:
 
         # Reference values
         self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
-        self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False, False, False
+        self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
 
         self.game_mode = False
         self.difficulty = False
@@ -51,7 +51,6 @@ class Game:
         self.rps_game = RPSGame(self)
         self.hangman_game = HangmanGame(self)
         self.cur_game = False
-
 
     def game_loop(self):
         while self.playing:
@@ -89,7 +88,6 @@ class Game:
 
             self.reset_keys()
 
-
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -112,10 +110,11 @@ class Game:
                 if event.key == pygame.K_RIGHT:
                     self.RIGHT_KEY = True
 
+                if pygame.K_a <= event.key <= pygame.K_z:
+                    self.OTHER_KEY.append(chr(event.key).lower())
 
     def reset_keys(self):
-        self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = False, False, False, False, False, False, False
-
+        self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
 
     def draw_text(self, text, size, x, y, **kwargs):
 
@@ -142,11 +141,9 @@ class Game:
 
         self.display.blit(text_surface, text_rect)
 
-
     def start_game(self):
         self.playing = True
         self.start_time = int(time.time())
-
 
     def get_background(self, name):
         # Use the helper function to get the correct path for the background

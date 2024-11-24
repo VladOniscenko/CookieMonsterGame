@@ -8,7 +8,6 @@ class Rating:
         self.game = game
         self.run_display = False
 
-
     def display_rating(self):
         while self.run_display:
             self.game.check_events()
@@ -42,7 +41,6 @@ class Rating:
         with open(get_asset_path('Other', 'scoreboard.csv'), mode='r') as file:
             data = list(csv.reader(file))
         return sorted(data, key=lambda line: int(line[1]), reverse=True)[:11]
-
 
     def check_input(self):
         if self.game.BACK_KEY or self.game.ESC_KEY:

@@ -161,7 +161,6 @@ class DifficultyMenu(Menu):
             self.game.main_menu.run_display = True
 
 
-
 class MiniGameMenu(Menu):
     def __init__(self, game) -> None:
         Menu.__init__(self, game)
