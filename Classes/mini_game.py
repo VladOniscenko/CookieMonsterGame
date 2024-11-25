@@ -28,11 +28,18 @@ class MainGame:
             'hangman': {
                 'title': 'Hangman',
                 'rules': "In Hangman, one player chooses a word, and the others guess letters to reveal it. Correct guesses fill in blanks, while wrong guesses bring the hangman closer to completion. The goal: guess the word before the drawing is finished!",
-                'total_attempts': {
-                    'easy': ['cat', 'book', 'tree', 'dog', 'fish'],
-                    'medium': ['planet', 'guitar', 'ocean', 'jungle', 'basket'],
-                    'hard': ['microscope', 'astronomy', 'philosophy', 'quadrilateral', 'hypothesis']
-                }
+            },
+            'binarize': {
+                'title': 'Binarize',
+                'rules': 'In Binarize, players convert decimal numbers into binary. The goal: accurately transform random decimal numbers into their binary equivalents and test your binary conversion skills!'
+            },
+            'encrypter': {
+                'title': 'Encrypter',
+                'rules': 'In Encrypter, players decode a message using a given encryption method, with clues like "only HEXES will save you, B=2." Alternatively, players encode messages following specific rules. The goal: master cryptography through decoding and encoding challenges!'
+            },
+            'math_champ': {
+                'title': 'Math Champ',
+                'rules': 'In Math Champ, players solve equations like A + A = 4 or B + A = 7 by deducing the values of the variables. The goal: use logic and problem-solving skills to figure out the correct values!'
             }
         }
 
