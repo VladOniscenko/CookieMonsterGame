@@ -1,21 +1,17 @@
-import time
-from os.path import join, abspath
-import os
-
 import pygame
-from pygame.examples.music_drop_fade import volume
+from functions import get_asset_path
+import time
+import sys
 
-pygame.mixer.init()
-
-from Classes.menu import *
+from Classes.menu import MainMenu, DifficultyMenu, MiniGameMenu
+from Classes.mini_game import RPSGame, HangmanGame
 from Classes.rating import Rating
-from Classes.mini_game import *
-from functions import *
 
 
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
 
         self.total_score = 0
         self.guessed_characters = []
@@ -39,7 +35,10 @@ class Game:
 
         self.game_mode = False
         self.difficulty = False
-        self.main_sound = self.play_music('main.wav', 99, 90, 20)
+
+        # todo enable music
+        # self.main_sound = self.play_music('main.wav', 99, 90, 20)
+        self.main_sound = None
 
         # Styling
         self.font = get_asset_path('Font', '8-BIT WONDER.TTF')
@@ -54,11 +53,20 @@ class Game:
 
         self.rps_game = RPSGame(self)
         self.hangman_game = HangmanGame(self)
-        self.cur_game = False
+        self.binarize_game = None
+        self.encrypter_game = None
+        self.math_champ_game = None
+
+        self.game_controller = None
 
     def game_loop(self):
         # stop playing any music
-        self.main_sound.music.pause()
+        try:
+            if self.main_sound.music:
+                self.main_sound.music.pause()
+        except Exception as e:
+            print(e)
+            pass
 
         while self.playing:
             self.display.fill(self.WHITE)
@@ -68,15 +76,17 @@ class Game:
             # select game
             self.mini_game_menu.display_menu()
 
-            if self.cur_game:
+            self.game_controller = self.get_game_controller()
+
+            if self.game_controller:
                 # set game rules, title, attempts etc.
-                self.cur_game.configure()
+                self.game_controller.configure()
 
                 # show rules
-                self.cur_game.display_rules()
+                self.game_controller.display_rules()
 
                 # play the game
-                self.cur_game.play()
+                self.game_controller.play()
 
                 # process after game
                 if self.game_mode not in self.played_games:
@@ -90,7 +100,7 @@ class Game:
                 # todo show winning password characters
                 # todo exclude played game from list
 
-            self.window.blit(self.display, (0,0))
+            self.window.blit(self.display,  (0, 0))
             pygame.display.update()
 
             self.reset_keys()
@@ -119,7 +129,6 @@ class Game:
 
                 if pygame.K_a <= event.key <= pygame.K_z:
                     self.OTHER_KEY.append(chr(event.key).lower())
-
 
     def reset_keys(self):
         self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
@@ -161,9 +170,7 @@ class Game:
         selected_image = pygame.image.load(path)
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
 
-    import pygame
-
-    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume = 0.1, play = True):
+    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume=0.03, play=True):
         # Initialize a new mixer instance
         pygame.mixer.quit()  # Ensure no conflicts with existing mixer
         pygame.mixer.init()
@@ -184,3 +191,17 @@ class Game:
             print(f"Error: {e}")
 
         return pygame.mixer
+
+    def get_game_controller(self):
+        if self.game_mode == 'rps':
+            return self.rps_game
+        elif self.game_mode == 'hangman':
+            return self.hangman_game
+        elif self.game_mode == 'math_champ':
+            return self.math_champ_game
+        elif self.game_mode == 'encrypter':
+            return self.encrypter_game
+        elif self.game_mode == 'binarize':
+            return self.binarize_game
+        else:
+            return None

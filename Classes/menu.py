@@ -1,6 +1,7 @@
 import sys
 import pygame
 
+
 class Menu:
     def __init__(self, game) -> None:
         self.game = game
@@ -12,14 +13,12 @@ class Menu:
 
         self.offset = -50
 
-
     def draw_cursor(self, **kwargs) -> None:
         color = self.game.BLACK
         if 'color' in kwargs:
             color = kwargs['color']
 
         self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y, color=color)
-
 
     def blit_screen(self) -> None:
         self.game.window.blit(self.game.display, (0, 0))
@@ -39,7 +38,6 @@ class MainMenu(Menu):
 
         self.cursor_rect.midtop = (self.start_pos + self.offset, self.playy)
 
-
     def display_menu(self) -> None:
         while self.run_display:
             self.game.check_events()
@@ -54,7 +52,6 @@ class MainMenu(Menu):
 
             self.draw_cursor()
             self.blit_screen()
-
 
     def move_cursor(self) -> None:
         if self.game.DOWN_KEY:
@@ -82,7 +79,6 @@ class MainMenu(Menu):
                 self.cursor_rect.midtop = (self.playx + self.offset, self.playy)
                 self.state = "Start"
 
-
     def check_input(self) -> None:
         self.move_cursor()
 
@@ -108,7 +104,6 @@ class DifficultyMenu(Menu):
         self.hardx, self.hardy = self.mid_w - 50, self.mediumy + self.option_offset
         self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
-
     def display_menu(self) -> None:
         while self.run_display:
             self.game.check_events()
@@ -123,7 +118,6 @@ class DifficultyMenu(Menu):
 
             self.draw_cursor()
             self.blit_screen()
-
 
     def move_cursor(self) -> None:
         if self.game.UP_KEY:
@@ -147,7 +141,6 @@ class DifficultyMenu(Menu):
                 self.state = "easy"
                 self.cursor_rect.midtop = (self.easyx + self.offset, self.easyy)
 
-
     def check_input(self) -> None:
         self.move_cursor()
 
@@ -159,7 +152,6 @@ class DifficultyMenu(Menu):
             self.game.start_game()
         elif self.game.BACK_KEY or self.game.ESC_KEY:
             self.game.main_menu.run_display = True
-
 
 
 class MiniGameMenu(Menu):
@@ -179,7 +171,6 @@ class MiniGameMenu(Menu):
         self.math_champx, self.math_champy = self.rpsx, self.encryptery + self.option_offset
 
         self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
-
 
     def display_menu(self) -> None:
         self.run_display = True
@@ -202,7 +193,6 @@ class MiniGameMenu(Menu):
 
             self.draw_cursor(color=self.game.BLACK)
             self.blit_screen()
-
 
     def move_cursor(self) -> None:
         if self.game.UP_KEY:
@@ -241,18 +231,9 @@ class MiniGameMenu(Menu):
                 self.state = "rps"
                 self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
 
-
     def check_input(self) -> None:
         self.move_cursor()
 
         if self.game.START_KEY and self.state not in self.game.played_games:
             self.run_display = False
             self.game.game_mode = self.state
-
-            # todo set more games up
-            if self.state == 'rps':
-                self.game.cur_game = self.game.rps_game
-            elif self.state == 'hangman':
-                self.game.cur_game = self.game.hangman_game
-            else:
-                raise ValueError('State not valid!')

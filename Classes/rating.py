@@ -1,6 +1,7 @@
 import pygame
 import csv
-from functions import *
+from functions import get_asset_path
+
 
 class Rating:
     def __init__(self, game):

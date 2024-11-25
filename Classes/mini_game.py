@@ -1,6 +1,6 @@
+from functions import get_image, split_text, draw_circle, draw_slanted_line, draw_vertical_line
 import random
 import time
-from functions import *
 import pygame
 from dataclasses import dataclass
 
@@ -108,7 +108,7 @@ class RPSGame(MainGame):
         self.s_scissors = Hand(game, 'scissors', sm_w, sm_h, (self.game.DISPLAY_W - sm_w) // 2 + gap, (self.game.DISPLAY_H - sm_w) // 2)
 
         # large right options
-        lg_w, lg_h, h_pos = 500, 500, self.mid_h // 2
+        lg_w, lg_h = 500, 500
         self.r_rock = Hand(game, 'rock', lg_w, lg_h, self.game.DISPLAY_W - 400, self.mid_h // 2)
         self.r_paper = Hand(game, 'paper', lg_w, lg_h, self.game.DISPLAY_W - 450, self.mid_h // 2)
         self.r_scissors = Hand(game, 'scissors', lg_w, lg_h, self.game.DISPLAY_W - 450, self.mid_h // 2)
@@ -119,9 +119,9 @@ class RPSGame(MainGame):
         self.l_scissors = Hand(game, 'scissors', lg_w, lg_h, -50, self.mid_h // 2, True)
 
         self.options = {
-            'paper': self.s_paper,'rock': self.s_rock,'scissors': self.s_scissors,
-            'r_paper': self.r_paper,'r_rock': self.r_rock,'r_scissors': self.r_scissors,
-            'l_paper': self.l_paper,'l_rock': self.l_rock,'l_scissors': self.l_scissors
+            'paper': self.s_paper, 'rock': self.s_rock, 'scissors': self.s_scissors,
+            'r_paper': self.r_paper, 'r_rock': self.r_rock, 'r_scissors': self.r_scissors,
+            'l_paper': self.l_paper, 'l_rock': self.l_rock, 'l_scissors': self.l_scissors
         }
 
     def play(self) -> None:
@@ -294,7 +294,7 @@ class HangmanGame(MainGame):
         self.word = None
         self.alphabet_objects = {}
         self.used_options = []
-        self.alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+        self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
         x, y = 20, 20
         for letter in self.alphabet:
@@ -393,11 +393,10 @@ class HangmanGame(MainGame):
     def draw_word_lines(self):
         word = self.word
         display = self.game.display
-        dw, dh = self.game.DISPLAY_W, self.game.DISPLAY_H
 
         line_length = 60
         space_between_lines = 15
-        start_x = dw // 2 - (len(word) * (line_length + space_between_lines)) // 2
+        start_x = self.game.DISPLAY_W // 2 - (len(word) * (line_length + space_between_lines)) // 2
         start_y = 575
         f_size = 40
 
@@ -424,7 +423,6 @@ class HangmanGame(MainGame):
         words = {
             'easy': ['cat', 'dog', 'hat', 'sun', 'ball', 'apple', 'tree', 'star', 'fish', 'moon'],
             'medium': ['jungle', 'monkey', 'puzzle', 'bridge', 'shadow', 'river', 'ocean', 'laptop', 'forest', 'mountain'],
-            'hard': ['pneumonia', 'subterranean', 'juxtaposition', 'xylophone', 'quizzical', 'antidisestablishmentarianism', 'cryptography', 'neuroplasticity', 'photosynthesis','hippopotomonstrosesquipedaliophobia'],
+            'hard': ['pneumonia', 'subterranean', 'juxtaposition', 'xylophone', 'quizzical', 'antidisestablishmentarianism', 'cryptography', 'neuroplasticity', 'photosynthesis', 'hippopotomonstrosesquipedaliophobia'],
         }
         return random.choice(words[difficulty])
-

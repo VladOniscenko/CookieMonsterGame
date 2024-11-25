@@ -6,7 +6,8 @@ import os
 import sys
 import pygame
 
-def get_asset_path(asset_type:str, name:str):
+
+def get_asset_path(asset_type: str, name: str):
     # For the deployed version (PyInstaller)
     base_path = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
 
@@ -20,7 +21,7 @@ def get_asset_path(asset_type:str, name:str):
     return os.path.join(assets_path, name)
 
 
-def get_image(name:str):
+def get_image(name: str):
     # Use the helper function to get the correct path for the image
     path = get_asset_path('Other', name)
 
@@ -60,9 +61,9 @@ def draw_circle(display, center, radius, thickness, color):
 
 def draw_vertical_line(display, start, length, thickness, color):
     """Draw a vertical line."""
-    pygame.draw.line(display,color,start,(start[0], start[1] + length), thickness)
+    pygame.draw.line(display, color, start, (start[0], start[1] + length), thickness)
 
 
 def draw_slanted_line(display, start, offset, thickness, color):
     """Draw a slanted line."""
-    pygame.draw.line(display,color,start,(start[0] + offset[0], start[1] + offset[1]), thickness)
+    pygame.draw.line(display, color, start, (start[0] + offset[0], start[1] + offset[1]), thickness)
