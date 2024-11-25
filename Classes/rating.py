@@ -15,11 +15,25 @@ class Rating:
             self.check_input()
 
             self.game.display.fill(self.game.WHITE)
-            self.game.draw_text('High Scores', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 300, position='center')
+
+            self.game.draw_text(
+                'High Scores',
+                30,
+                self.game.DISPLAY_W / 2,
+                self.game.DISPLAY_H / 2 - 300,
+                position='center'
+            )
 
             headers = ["Name", "Score", "Time", "Mode"]
             header_text = "   ".join(headers)
-            self.game.draw_text(header_text, 25, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 150, position='center')
+
+            self.game.draw_text(
+                header_text,
+                25,
+                self.game.DISPLAY_W / 2,
+                self.game.DISPLAY_H / 2 - 150,
+                position='center'
+            )
 
             line_height = 25
             index = 0
@@ -28,7 +42,15 @@ class Rating:
             for row in self.get_scores():
                 y = start_pos + ((index + 1) * line_height)
                 score_text = "   ".join(row)
-                self.game.draw_text(score_text, 15, self.game.DISPLAY_W / 2, (self.game.DISPLAY_H / 2) + y, position='center')
+
+                self.game.draw_text(
+                    score_text,
+                    15,
+                    self.game.DISPLAY_W / 2,
+                    (self.game.DISPLAY_H / 2) + y,
+                    position='center'
+                )
+
                 index += 1
 
             self.blit_screen()
