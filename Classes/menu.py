@@ -165,6 +165,8 @@ class DifficultyMenu(Menu):
 class MiniGameMenu(Menu):
     def __init__(self, game) -> None:
         Menu.__init__(self, game)
+        self.encrypter_color = None
+        self.math_champ_color = None
         self.binarize_color = None
         self.hangman_color = None
         self.rps_color = None
@@ -173,6 +175,9 @@ class MiniGameMenu(Menu):
         self.rpsx, self.rpsy = self.mid_w - 100, self.mid_h - 150
         self.hangmanx, self.hangmany = self.rpsx, self.rpsy + self.option_offset
         self.binarizex, self.binarizey = self.rpsx, self.hangmany + self.option_offset
+        self.encrypterx, self.encryptery = self.rpsx, self.binarizey + self.option_offset
+        self.math_champx, self.math_champy = self.rpsx, self.encryptery + self.option_offset
+
         self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
 
 
@@ -186,11 +191,14 @@ class MiniGameMenu(Menu):
             self.rps_color = False if 'rps' not in self.game.played_games else self.game.RED
             self.hangman_color = False if 'hangman' not in self.game.played_games else self.game.RED
             self.binarize_color = False if 'binarize' not in self.game.played_games else self.game.RED
+            self.encrypter_color = False if 'encrypter' not in self.game.played_games else self.game.RED
 
             self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center')
             self.game.draw_text('Rock Paper Scissors', 20, self.rpsx, self.rpsy, color=self.rps_color)
             self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany, color=self.hangman_color)
             self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey, color=self.binarize_color)
+            self.game.draw_text('Encrypter', 20, self.encrypterx, self.encryptery, color=self.encrypter_color)
+            self.game.draw_text('Math Champ', 20, self.math_champx, self.math_champy, color=self.math_champ_color)
 
             self.draw_cursor(color=self.game.BLACK)
             self.blit_screen()
@@ -199,11 +207,20 @@ class MiniGameMenu(Menu):
     def move_cursor(self) -> None:
         if self.game.UP_KEY:
             if self.state == 'rps':
-                self.state = 'binarize'
-                self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
+                self.state = 'math_champ'
+                self.cursor_rect.midtop = (self.math_champx + self.offset, self.math_champy)
             elif self.state == 'binarize':
                 self.state = 'hangman'
                 self.cursor_rect.midtop = (self.hangmanx + self.offset, self.hangmany)
+            elif self.state == 'hangman':
+                self.state = "rps"
+                self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
+            elif self.state == 'encrypter':
+                self.state = "binarize"
+                self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
+            elif self.state == 'math_champ':
+                self.state = "encrypter"
+                self.cursor_rect.midtop = (self.encrypterx + self.offset, self.encryptery)
             else:
                 self.state = "rps"
                 self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
@@ -214,6 +231,12 @@ class MiniGameMenu(Menu):
             elif self.state == 'hangman':
                 self.state = 'binarize'
                 self.cursor_rect.midtop = (self.binarizex + self.offset, self.binarizey)
+            elif self.state == 'binarize':
+                self.state = 'encrypter'
+                self.cursor_rect.midtop = (self.encrypterx + self.offset, self.encryptery)
+            elif self.state == 'encrypter':
+                self.state = 'math_champ'
+                self.cursor_rect.midtop = (self.math_champx + self.offset, self.math_champy)
             else:
                 self.state = "rps"
                 self.cursor_rect.midtop = (self.rpsx + self.offset, self.rpsy)
