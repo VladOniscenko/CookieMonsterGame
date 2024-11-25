@@ -1,5 +1,5 @@
-import pygame
 from functions import get_asset_path
+import pygame
 import time
 import sys
 
@@ -17,7 +17,6 @@ class Game:
         self.guessed_characters = []
         self.password = 'challenge'
         self.pass_list = list(self.password)
-        self.total_games = 1
         self.played_games = []
 
         # Game init settings

@@ -9,9 +9,14 @@ import pygame
 
 def get_asset_path(asset_type: str, name: str):
     # For the deployed version (PyInstaller)
-    base_path = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+    base_path = getattr(
+        sys,
+        '_MEIPASS',
+        os.path.abspath(os.path.dirname(__file__))
+    )
 
-    # If running in the development environment, use the current working directory
+    # If running in the development environment,
+    # use the current working directory
     if not hasattr(sys, '_MEIPASS'):
         assets_path = os.path.join(os.getcwd(), 'assets', asset_type)
     else:
@@ -40,7 +45,8 @@ def split_text(text, font, font_size, max_width) -> str:
         test_line = f"{current_line} {word}".strip()
         test_surface = font.render(test_line, True, (139, 0, 0))
 
-        # If the line exceeds the max width, push the current line to lines and start a new one
+        # If the line exceeds the max width,
+        # push the current line to lines and start a new one
         if test_surface.get_width() <= max_width:
             current_line = test_line
         else:
@@ -61,9 +67,21 @@ def draw_circle(display, center, radius, thickness, color):
 
 def draw_vertical_line(display, start, length, thickness, color):
     """Draw a vertical line."""
-    pygame.draw.line(display, color, start, (start[0], start[1] + length), thickness)
+    pygame.draw.line(
+        display,
+        color,
+        start,
+        (start[0], start[1] + length),
+        thickness
+    )
 
 
 def draw_slanted_line(display, start, offset, thickness, color):
     """Draw a slanted line."""
-    pygame.draw.line(display, color, start, (start[0] + offset[0], start[1] + offset[1]), thickness)
+    pygame.draw.line(
+        display,
+        color,
+        start,
+        (start[0] + offset[0], start[1] + offset[1]),
+        thickness
+    )
