@@ -34,7 +34,7 @@ def get_image(name: str):
     return pygame.image.load(path)
 
 
-def split_text(text, font, font_size, max_width) -> str:
+def split_text(text, font, font_size, max_width) -> list:
     """Breaks the text into multiple lines that fit within the given width."""
     font = pygame.font.Font(font, font_size)
     lines = []
