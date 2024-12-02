@@ -10,6 +10,7 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
+        self.cur_game = None
         pygame.init()
         pygame.mixer.init()
 
@@ -204,3 +205,31 @@ class Game:
             return self.binarize_game
         else:
             return None
+
+    def pre_story(self):
+        while False:
+            # Rules text
+            rules = [
+                "Game Rules:",
+                "You will play a series of mini-games.",
+                "For each mini-game, you will earn a letter.",
+                "If you win the most mini-games, you can decrypt the password in a later stage.",
+                "There are a total of 5 mini-games."
+            ]
+
+            # Clear screen
+            self.display.fill(self.BLACK)
+
+            # Display each line of text
+            y_offset = 10
+            y_start = 200
+
+            for i, line in enumerate(rules):
+                self.draw_text(line, 20, self.DISPLAY_W / 2, y_start + (y_offset * i), color=self.WHITE)
+
+            self.blit_screen()
+
+    def blit_screen(self) -> None:
+        self.window.blit(self.display, (0, 0))
+        pygame.display.update()
+        self.reset_keys()

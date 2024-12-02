@@ -20,6 +20,9 @@ def main():
         # display selection menu
         g.difficulties.display_menu()
 
+        # play pre story
+        g.pre_story()
+
         # display rating scoreboard
         g.rating.display_rating()
 
