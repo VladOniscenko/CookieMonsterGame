@@ -172,7 +172,7 @@ class Game:
         selected_image = pygame.image.load(path)
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
 
-    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume=1, play=True):
+    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume=0.03, play=True):
         # Initialize a new mixer instance
         pygame.mixer.quit()  # Ensure no conflicts with existing mixer
         pygame.mixer.init()
