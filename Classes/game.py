@@ -10,8 +10,7 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
-        self.display_rules = None
-        self.cur_game = None
+        self.display_rules, self.cur_game, self.display_story = None, None, None
         pygame.init()
         pygame.mixer.init()
 
@@ -39,8 +38,7 @@ class Game:
         self.difficulty = False
 
         # todo enable music
-        self.main_sound = self.play_music('main.wav', 99, 90, 20)
-        self.main_sound = None
+        self.sound = self.play_music('main.wav', 99, 90, 20)
 
         # Styling
         self.font = get_asset_path('Font', '8-BIT WONDER.TTF')
@@ -62,14 +60,6 @@ class Game:
         self.game_controller = None
 
     def game_loop(self):
-        # stop playing any music
-        try:
-            if self.main_sound.music:
-                self.main_sound.music.pause()
-        except Exception as e:
-            print(e)
-            pass
-
         while self.playing:
             self.display.fill(self.WHITE)
             self.check_events()
@@ -209,6 +199,10 @@ class Game:
             return None
 
     def show_rules(self):
+        # stop playing any music
+        if self.sound.music:
+            self.sound.music.pause()
+
         # Rules text
         rules = [
             "You will play a series of mini-games.",
@@ -247,7 +241,72 @@ class Game:
             self.blit_screen()
 
     def pre_story(self):
-        pass
+        self.sound = self.play_music('horror.mp3', 99, 90, 20, volume=.1)
+        # Story text
+        story = [
+            "WARNING: A malicious entity has infiltrated your computer!",
+            "The Cookie Monster, driven by his hunger for cookies, has spread a virus across your system.",
+            "Your files are at risk, and he demands the ultimate password to unleash his sugary chaos!",
+            "You must fight back by playing games to get letters and decrypt the password.",
+            "Only then can you save your computer from his cookie-fueled mayhem..."
+        ]
+
+        self.display_story = True
+        story_line_index = 0
+        current_line = ""
+        char_index = 0
+        line_speed = 40
+        last_time = pygame.time.get_ticks()
+
+        while self.display_story:
+            self.check_events()
+            if self.START_KEY:
+                self.display_story = False
+
+            self.display.fill(self.BLACK)
+
+            y_start = 250
+            y_offset = 50
+
+            if story_line_index < len(story):
+                now = pygame.time.get_ticks()
+                if now - last_time > line_speed:
+                    if char_index < len(story[story_line_index]):
+                        current_line += story[story_line_index][char_index]
+                        char_index += 1
+                    else:
+                        story_line_index += 1
+                        current_line = ""
+                        char_index = 0
+                    last_time = now
+
+            # Draw all fully written lines and the current line being typed
+            for i in range(story_line_index):
+                self.draw_text(story[i], 30, self.mid_w, y_start + (y_offset * i), color=self.WHITE, position='center',
+                               font=self.second_font)
+
+            if current_line:
+                self.draw_text(
+                    current_line,
+                    30,
+                    self.mid_w,
+                    y_start + (y_offset * story_line_index),
+                    color=self.WHITE,
+                    position='center',
+                    font=self.second_font
+                )
+
+            self.draw_text(
+                'PRESS ENTER TO SKIP >>',
+                50,
+                self.mid_w,
+                y_start + (y_offset * (len(story) + 2)),
+                font=self.second_font,
+                position='center',
+                color=self.RED
+            )
+
+            self.blit_screen()
 
     def blit_screen(self) -> None:
         self.window.blit(self.display, (0, 0))
