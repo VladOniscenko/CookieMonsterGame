@@ -21,6 +21,9 @@ def main():
         g.difficulties.display_menu()
 
         # play pre story
+        g.show_rules()
+
+        # play pre story
         g.pre_story()
 
         # display rating scoreboard

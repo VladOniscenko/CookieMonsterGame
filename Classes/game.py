@@ -10,6 +10,7 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
+        self.display_rules = None
         self.cur_game = None
         pygame.init()
         pygame.mixer.init()
@@ -28,6 +29,7 @@ class Game:
         self.display = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
+        self.mid_w, self.mid_h = self.DISPLAY_W / 2, self.DISPLAY_H / 2
 
         # Reference values
         self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
@@ -206,28 +208,46 @@ class Game:
         else:
             return None
 
-    def pre_story(self):
-        while False:
-            # Rules text
-            rules = [
-                "Game Rules:",
-                "You will play a series of mini-games.",
-                "For each mini-game, you will earn a letter.",
-                "If you win the most mini-games, you can decrypt the password in a later stage.",
-                "There are a total of 5 mini-games."
-            ]
+    def show_rules(self):
+        # Rules text
+        rules = [
+            "You will play a series of mini-games.",
+            "For each mini-game, you will earn letters.",
+            "If you win the most mini-games, you can decrypt the password in a later stage.",
+            "There are a total of 5 mini-games."
+        ]
 
+        self.display_rules = True
+        while self.display_rules:
+            self.check_events()
+            if self.START_KEY:
+                self.display_rules = False
+                
             # Clear screen
             self.display.fill(self.BLACK)
 
             # Display each line of text
-            y_offset = 10
-            y_start = 200
+            y_offset = 40
+            y_start = 250
 
+            self.draw_text("Game Rules:", 40, self.mid_w, y_start - y_offset, color=self.WHITE, position='center', font=self.second_font)
             for i, line in enumerate(rules):
-                self.draw_text(line, 20, self.DISPLAY_W / 2, y_start + (y_offset * i), color=self.WHITE)
+                self.draw_text(line, 30, self.mid_w, y_start + (y_offset * i), color=self.WHITE, position='center', font=self.second_font)
+
+            self.draw_text(
+                'PRESS ENTER TO START >>',
+                50,
+                self.mid_w,
+                y_start + (y_offset * len(rules)) + 50,
+                font=self.second_font,
+                position='center',
+                color=self.RED
+            )
 
             self.blit_screen()
+
+    def pre_story(self):
+        pass
 
     def blit_screen(self) -> None:
         self.window.blit(self.display, (0, 0))
