@@ -1,5 +1,6 @@
 import sys
 import pygame
+from functions import get_asset_path
 
 
 class Menu:
@@ -45,6 +46,25 @@ class MainMenu(Menu):
 
             self.game.display.fill(self.game.WHITE)
             self.game.display.blit(self.game.get_background('main.png'), (0, 0))
+
+            image = pygame.image.load(get_asset_path('Other', 'main_controls.png'))
+            original_width, original_height = image.get_size()
+
+            # Scaling percentage (e.g., 50% = 0.5)
+            scale_percentage = 0.25
+            new_width = int(original_width * scale_percentage)
+            new_height = int(original_height * scale_percentage)
+
+            # Scale the image
+            scaled_image = pygame.transform.scale(image, (new_width, new_height))
+
+            # Blit the scaled image to the display
+            self.game.display.blit(
+                scaled_image,
+                (self.game.DISPLAY_W - 290, 50)
+            )
+
+            self.game.draw_text('MAIN CONTROLS', 20, self.game.DISPLAY_W - 270, 10, color=self.game.BLACK)
 
             self.game.draw_text('Start', 20, self.playx, self.playy, color=self.game.BLACK)
             self.game.draw_text('Scoreboard', 20, self.scoreboardx, self.scoreboardy, color=self.game.BLACK)
