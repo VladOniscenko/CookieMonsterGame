@@ -8,21 +8,8 @@ import pygame
 
 
 def get_asset_path(asset_type: str, name: str):
-    # For the deployed version (PyInstaller)
-    base_path = getattr(
-        sys,
-        '_MEIPASS',
-        os.path.abspath(os.path.dirname(__file__))
-    )
-
-    # If running in the development environment,
-    # use the current working directory
-    if not hasattr(sys, '_MEIPASS'):
-        assets_path = os.path.join(os.getcwd(), 'assets', asset_type)
-    else:
-        # If running as a bundled executable, use the _MEIPASS path
-        assets_path = os.path.join(base_path, 'assets', asset_type)
-
+    # Construct the path to the asset
+    assets_path = os.path.join(sys.path[0], 'assets', asset_type)
     return os.path.join(assets_path, name)
 
 
