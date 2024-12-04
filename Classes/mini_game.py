@@ -488,12 +488,7 @@ class HangmanGame(MainGame):
         self.word = None
         self.alphabet_objects = {}
         self.used_options = []
-        self.alphabet = ['a', 'b', 'c', 'd', 'e',
-                         'f', 'g', 'h', 'i', 'j',
-                         'k', 'l', 'm', 'n', 'o',
-                         'p', 'q', 'r', 's', 't',
-                         'u', 'v', 'w', 'x', 'y',
-                         'z']
+        self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
 
         x, y = 20, 20
         for letter in self.alphabet:
