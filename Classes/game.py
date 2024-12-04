@@ -24,15 +24,12 @@ class Game:
         self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
 
         self.WIDTH, self.HEIGHT = 1280, 720
-        # Game init settings
-        # info = pygame.display.Info()
-        # self.WIDTH, self.HEIGHT = info.current_w, info.current_h
         self.FPS = 60
 
         # Display setup
         self.display = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
-        self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H), pygame.RESIZABLE)
+        self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.mid_w, self.mid_h = self.DISPLAY_W / 2, self.DISPLAY_H / 2
 
         # Reference values
