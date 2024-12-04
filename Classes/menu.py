@@ -64,7 +64,7 @@ class MainMenu(Menu):
                 (self.game.DISPLAY_W - 290, 50)
             )
 
-            self.game.draw_text('MAIN CONTROLS', 20, self.game.DISPLAY_W - 270, 10, color=self.game.BLACK)
+            self.game.draw_text('MAIN CONTROLS', 15, self.game.DISPLAY_W - 230, 10, color=self.game.BLACK)
 
             self.game.draw_text('Start', 20, self.playx, self.playy, color=self.game.BLACK)
             self.game.draw_text('Scoreboard', 20, self.scoreboardx, self.scoreboardy, color=self.game.BLACK)
