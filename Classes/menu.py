@@ -40,6 +40,7 @@ class MainMenu(Menu):
         self.cursor_rect.midtop = (self.start_pos + self.offset, self.playy)
 
     def display_menu(self) -> None:
+        self.run_display = True
         while self.run_display:
             self.game.check_events()
             self.check_input()

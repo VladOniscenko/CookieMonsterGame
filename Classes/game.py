@@ -10,6 +10,7 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
+        self.guessing_password = False
         self.display_rules, self.cur_game, self.display_story = None, None, None
         pygame.init()
         pygame.mixer.init()
@@ -19,6 +20,14 @@ class Game:
         self.password = 'challenge'
         self.pass_list = list(self.password)
         self.played_games = []
+        self.inputted_chars = []
+
+        self.alphabet = ['a', 'b', 'c', 'd', 'e',
+                         'f', 'g', 'h', 'i', 'j',
+                         'k', 'l', 'm', 'n', 'o',
+                         'p', 'q', 'r', 's', 't',
+                         'u', 'v', 'w', 'x', 'y',
+                         'z']
 
         # Game init settings
         self.WIDTH, self.HEIGHT = 1280, 720
@@ -60,6 +69,7 @@ class Game:
         self.game_controller = None
 
     def game_loop(self) -> None:
+        self.playing = True
         while self.playing:
             self.display.fill(self.WHITE)
             self.check_events()
@@ -84,6 +94,10 @@ class Game:
                 if self.game_mode not in self.played_games:
                     self.played_games.append(self.game_mode)
 
+                # todo fix 2 if more games available
+                if len(self.played_games) >= 2:
+                    self.playing = False
+
                 # if self.cur_game.is_winner:
                 #     self.t
 
@@ -96,6 +110,9 @@ class Game:
             pygame.display.update()
 
             self.reset_keys()
+
+        # display password guessing screen
+        self.guess_password()
 
     def check_events(self) -> None:
         for event in pygame.event.get():
@@ -151,7 +168,6 @@ class Game:
         self.display.blit(text_surface, text_rect)
 
     def start_game(self) -> None:
-        self.playing = True
         self.start_time = int(time.time())
 
     def get_background(self, name: str) -> pygame.image:
@@ -312,3 +328,73 @@ class Game:
         self.window.blit(self.display, (0, 0))
         pygame.display.update()
         self.reset_keys()
+
+    def guess_password(self):
+        self.guessing_password = True
+        while self.guessing_password:
+            self.check_events()
+
+            for char in self.OTHER_KEY:
+                if char in self.alphabet and len(self.inputted_chars) < len(self.password):
+                    self.inputted_chars.append(char)
+
+            if self.BACK_KEY and len(self.inputted_chars) > 0:
+                self.inputted_chars.pop()
+
+            if self.START_KEY and len(self.inputted_chars) == len(self.password):
+                self.guessing_password = False
+
+
+            self.display.fill(self.BLACK)
+            self.draw_text('GUESS THE PASSWORD', 20, self.DISPLAY_W / 2, 100, color=self.WHITE, position='center')
+
+            self.draw_password_lines(self.inputted_chars)
+
+            self.blit_screen()
+
+    def draw_password_lines(self, inputted_chars: list[str]) -> None:
+        word = self.password
+        display = self.display
+
+        line_length = 60
+        space_between_lines = 15
+        start_x = (self.DISPLAY_W // 2 -
+                   (len(word) * (line_length +
+                                 space_between_lines)) // 2)
+
+        start_y = 400
+        f_size = 20
+
+        # Draw lines for each letter in the word
+        for i, char in enumerate(word):
+            # Draw the line for the current character
+            # (even if it's not guessed yet)
+            pygame.draw.line(
+                display,
+                self.WHITE,
+                (start_x + i * (line_length +
+                                space_between_lines), start_y),
+                (start_x + i * (line_length +
+                                space_between_lines) + line_length, start_y),
+                3
+            )
+
+            # Calculate the width of the character to center it on the line
+            font = pygame.font.Font(self.font, f_size)
+
+            # Get both width and height
+            char_width, char_height = font.size(char)
+
+            # Calculate the x-coordinate to center the text
+            char_x = (start_x + i * (line_length + space_between_lines)
+                      + (line_length - char_width) // 2)
+
+            self.draw_text(
+                inputted_chars[i] if i < len(inputted_chars) else '',
+                f_size,
+                char_x,
+                start_y - 50,
+                color=self.WHITE,
+                position='topleft'
+            )
+
