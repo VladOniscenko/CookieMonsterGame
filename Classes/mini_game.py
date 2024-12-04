@@ -100,7 +100,7 @@ class MainGame:
         self.title = ''
         self.rules = ''
 
-    def get_rule_value(self, column_name):
+    def get_rule_value(self, column_name: str):
         rule = self.game_rules.get(self.game.game_mode, {}).get(column_name)
         if isinstance(rule, dict):
             return rule.get(self.game.difficulty, 1)
@@ -166,7 +166,7 @@ class MainGame:
 
 
 class RPSGame(MainGame):
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         MainGame.__init__(self, game)
         self.is_winner = False
         self.user_selected = False

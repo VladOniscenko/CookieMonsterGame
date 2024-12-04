@@ -59,7 +59,7 @@ class Game:
 
         self.game_controller = None
 
-    def game_loop(self):
+    def game_loop(self) -> None:
         while self.playing:
             self.display.fill(self.WHITE)
             self.check_events()
@@ -97,7 +97,7 @@ class Game:
 
             self.reset_keys()
 
-    def check_events(self):
+    def check_events(self) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -122,10 +122,10 @@ class Game:
                 if pygame.K_a <= event.key <= pygame.K_z:
                     self.OTHER_KEY.append(chr(event.key).lower())
 
-    def reset_keys(self):
+    def reset_keys(self) -> None:
         self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
 
-    def draw_text(self, text, size, x, y, **kwargs):
+    def draw_text(self, text: str, size: int | float, x: int | float, y: int | float, **kwargs) -> None:
 
         if not isinstance(text, str):
             text = str(text)
@@ -150,11 +150,11 @@ class Game:
 
         self.display.blit(text_surface, text_rect)
 
-    def start_game(self):
+    def start_game(self) -> None:
         self.playing = True
         self.start_time = int(time.time())
 
-    def get_background(self, name):
+    def get_background(self, name: str) -> pygame.image:
         # Use the helper function to get the correct path for the background
         path = get_asset_path('Background', name)
 
@@ -162,7 +162,7 @@ class Game:
         selected_image = pygame.image.load(path)
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
 
-    def play_music(self, file_path, loops=1, start=0.0, fade=500, volume=0.03, play=True):
+    def play_music(self, file_path: str, loops: int = 1, start: float = 0.0, fade: int = 500, volume: float = 0.03, play: bool = True) -> pygame.mixer:
         # Initialize a new mixer instance
         pygame.mixer.quit()  # Ensure no conflicts with existing mixer
         pygame.mixer.init()
@@ -184,7 +184,7 @@ class Game:
 
         return pygame.mixer
 
-    def get_game_controller(self):
+    def get_game_controller(self) -> RPSGame | HangmanGame | None:
         if self.game_mode == 'rps':
             return self.rps_game
         elif self.game_mode == 'hangman':
@@ -198,7 +198,7 @@ class Game:
         else:
             return None
 
-    def show_rules(self):
+    def show_rules(self) -> None:
         # stop playing any music
         if self.sound.music:
             self.sound.music.pause()
@@ -216,7 +216,7 @@ class Game:
             self.check_events()
             if self.START_KEY:
                 self.display_rules = False
-                
+
             # Clear screen
             self.display.fill(self.BLACK)
 
@@ -240,7 +240,7 @@ class Game:
 
             self.blit_screen()
 
-    def pre_story(self):
+    def pre_story(self) -> None:
         self.sound = self.play_music('horror.mp3', 99, 90, 20, volume=.1)
         # Story text
         story = [
