@@ -65,7 +65,15 @@ class Game:
         self.game_controller = None
 
     def game_loop(self) -> None:
-        self.playing = True
+        if not self.playing:
+            return
+
+        # play pre story
+        self.show_rules()
+
+        # play pre story
+        self.pre_story()
+
         while self.playing:
             self.display.fill(self.WHITE)
             self.check_events()
@@ -159,6 +167,7 @@ class Game:
         self.display.blit(text_surface, text_rect)
 
     def start_game(self) -> None:
+        self.playing = True
         self.start_time = int(time.time())
 
     def get_background(self, name: str) -> pygame.image:

@@ -4,16 +4,12 @@ from Classes.game import Game
 
 
 def main():
+    # game initialization
+    g = Game()
+    clock = pygame.time.Clock()
 
     # main loop that checks if game is still running
-    while True:
-        # game initialization
-        g = Game()
-        clock = pygame.time.Clock()
-
-        if not g.running:
-            break
-
+    while g.running:
         # clock speed Frames Per Second
         clock.tick(g.FPS)
 
@@ -22,12 +18,6 @@ def main():
 
         # display selection menu
         g.difficulties.display_menu()
-
-        # play pre story
-        g.show_rules()
-
-        # play pre story
-        g.pre_story()
 
         # display rating scoreboard
         g.rating.display_rating()
