@@ -4,12 +4,15 @@ from Classes.game import Game
 
 
 def main():
-    # game initialization
-    g = Game()
-    clock = pygame.time.Clock()
 
     # main loop that checks if game is still running
-    while g.running:
+    while True:
+        # game initialization
+        g = Game()
+        clock = pygame.time.Clock()
+
+        if not g.running:
+            break
 
         # clock speed Frames Per Second
         clock.tick(g.FPS)
