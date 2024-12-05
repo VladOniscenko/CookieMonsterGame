@@ -12,10 +12,11 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
-        self.guessing_password = False
-        self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
         pygame.init()
         pygame.mixer.init()
+
+        self.guessing_password = False
+        self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
 
         self.total_score = 0
         self.guessed_characters = []
@@ -112,6 +113,9 @@ class Game:
 
         # display password guessing screen
         self.guess_password()
+
+        # reset game
+        self.reset()
 
     def check_events(self) -> None:
         for event in pygame.event.get():
@@ -464,5 +468,22 @@ class Game:
                 )
                 self.blit_screen()
 
+    def reset(self):
+        self.played_games = []
+        self.inputted_chars = []
 
+        self.guessing_password = False
+        self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
 
+        self.total_score = 0
+        self.guessed_characters = []
+        self.amount_games_unplayed = 2
+        self.pass_list = list(self.password)
+        self.cur_game = None
+        self.game_controller = None
+
+        self.rps_game = RPSGame(self)
+        self.hangman_game = HangmanGame(self)
+        self.binarize_game = None
+        self.encrypter_game = None
+        self.math_champ_game = None
