@@ -3,6 +3,7 @@ import pygame
 import time
 import sys
 import random
+import math
 
 from Classes.menu import MainMenu, DifficultyMenu, MiniGameMenu
 from Classes.mini_game import RPSGame, HangmanGame
@@ -401,7 +402,7 @@ class Game:
 
     def win_logic(self, has_user_won: bool):
         if has_user_won:
-            amount_letters = len(self.pass_list) // self.amount_games_unplayed
+            amount_letters = math.floor(len(self.pass_list) /self.amount_games_unplayed)
             self.amount_games_unplayed -= 1
             new_letters = ""
 
