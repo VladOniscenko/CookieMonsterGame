@@ -26,6 +26,7 @@ class Game:
         self.played_games = []
         self.inputted_chars = []
         self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
+        self.run_win_dialog = None
 
         self.WIDTH, self.HEIGHT = 1280, 720
         self.FPS = 60
@@ -113,6 +114,12 @@ class Game:
 
         # display password guessing screen
         self.guess_password()
+
+        # check if user inputted correct password
+        # and display result of it
+        self.win_dialog()
+
+        # todo show time and score
 
         # reset game
         self.reset()
@@ -351,6 +358,7 @@ class Game:
 
             self.display.fill(self.BLACK)
             self.draw_text('GUESS THE PASSWORD', 20, self.DISPLAY_W / 2, 100, color=self.WHITE, position='center')
+            self.draw_text(' '.join(self.guessed_characters), 20, self.DISPLAY_W / 2, 200, color=self.ORANGE, position='center', font=self.second_font)
 
             self.draw_password_lines(self.inputted_chars)
 
@@ -487,3 +495,29 @@ class Game:
         self.binarize_game = None
         self.encrypter_game = None
         self.math_champ_game = None
+
+    def correct_password(self) -> bool:
+        return ''.join(self.inputted_chars) == self.password
+
+    def win_dialog(self):
+        win_text =  'PASSWORD IS CORRECT!' if self.correct_password() else 'PASSWORD IS INCORRECT!'
+        win_color =  self.BLACK if self.correct_password() else self.RED
+        self.run_win_dialog = True
+        while self.run_win_dialog:
+            self.check_events()
+            if self.START_KEY:
+                self.run_win_dialog = False
+
+            self.display.fill(self.WHITE)
+
+            self.draw_text(
+                win_text,
+                50,
+                self.mid_w,
+                self.mid_h,
+                font=self.second_font,
+                position='center',
+                color=win_color
+            )
+
+            self.blit_screen()
