@@ -2,6 +2,7 @@ from functions import get_asset_path
 import pygame
 import time
 import sys
+import random
 
 from Classes.menu import MainMenu, DifficultyMenu, MiniGameMenu
 from Classes.mini_game import RPSGame, HangmanGame
@@ -11,7 +12,7 @@ from Classes.rating import Rating
 class Game:
     def __init__(self):
         self.guessing_password = False
-        self.display_rules, self.cur_game, self.display_story = None, None, None
+        self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
         pygame.init()
         pygame.mixer.init()
 
@@ -19,6 +20,7 @@ class Game:
         self.guessed_characters = []
         self.password = 'challenge'
         self.pass_list = list(self.password)
+        self.amount_games_unplayed = 2
         self.played_games = []
         self.inputted_chars = []
         self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
@@ -91,13 +93,8 @@ class Game:
                 if len(self.played_games) >= 2:
                     self.playing = False
 
-                # if self.cur_game.is_winner:
-                #     self.t
+                self.win_logic(self.game_controller.is_winner)
 
-                # todo check if user won
-                # todo update total score
-                # todo show winning password characters
-                # todo exclude played game from list
 
             self.window.blit(self.display,  (0, 0))
             pygame.display.update()
@@ -400,3 +397,62 @@ class Game:
             position='center',
             font=self.second_font
         )
+
+
+    def win_logic(self, has_user_won: bool):
+        if has_user_won:
+            amount_letters = len(self.pass_list) // self.amount_games_unplayed
+            self.amount_games_unplayed -= 1
+            new_letters = ""
+
+            for _ in range(amount_letters):
+                index = random.randint(0, len(self.pass_list))
+                new_letter = self.pass_list.pop(index)
+                new_letters += new_letter
+                self.guessed_characters.append(new_letter)
+            self.display_winscreen = True
+
+            while self.display_winscreen:
+                self.check_events()
+                if self.START_KEY:
+                    self.display_winscreen = False
+                self.display.fill(self.WHITE)
+
+                y_start = 250
+                y_offset = 50
+
+                self.draw_text(
+                    'YOU WIN! HERE ARE YOUR LETTERS: ' + new_letters,
+                    50,
+                    self.mid_w,
+                    y_start + y_offset,
+                    font=self.second_font,
+                    position='center',
+                    color=self.BLACK
+                )
+                self.blit_screen()
+
+        else:
+            self.display_losescreen = True
+            while self.display_losescreen:
+                self.check_events()
+                if self.START_KEY:
+                    self.display_losescreen = False
+                self.display.fill(self.RED)
+
+                y_start = 250
+                y_offset = 50
+
+                self.draw_text(
+                    'YOU LOSE',
+                    50,
+                    self.mid_w,
+                    y_start + y_offset,
+                    font=self.second_font,
+                    position='center',
+                    color=self.BLACK
+                )
+                self.blit_screen()
+
+
+
