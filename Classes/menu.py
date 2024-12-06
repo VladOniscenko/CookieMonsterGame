@@ -130,14 +130,14 @@ class DifficultyMenu(Menu):
             self.game.check_events()
             self.check_input()
 
-            self.game.display.fill(self.game.WHITE)
+            self.game.display.fill(self.game.BLACK)
 
-            self.game.draw_text('DIFFICULTY', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 100, position='center')
+            self.game.draw_text('DIFFICULTY', 30, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 100, position='center', color=self.game.WHITE)
             self.game.draw_text('easy', 20, self.easyx, self.easyy, color=self.game.GREEN)
             self.game.draw_text('medium', 20, self.mediumx, self.mediumy, color=self.game.ORANGE)
             self.game.draw_text('hard', 20, self.hardx, self.hardy, color=self.game.RED)
 
-            self.draw_cursor()
+            self.draw_cursor(color=self.game.WHITE)
             self.blit_screen()
 
     def move_cursor(self) -> None:
@@ -199,20 +199,21 @@ class MiniGameMenu(Menu):
             self.game.check_events()
             self.check_input()
 
-            self.game.display.fill(self.game.WHITE)
-            self.rps_color = False if 'rps' not in self.game.played_games else self.game.RED
-            self.hangman_color = False if 'hangman' not in self.game.played_games else self.game.RED
-            self.binarize_color = False if 'binarize' not in self.game.played_games else self.game.RED
-            self.encrypter_color = False if 'encrypter' not in self.game.played_games else self.game.RED
+            self.game.display.fill(self.game.BLACK)
+            self.rps_color = self.game.WHITE if 'rps' not in self.game.played_games else self.game.RED
+            self.hangman_color = self.game.WHITE if 'hangman' not in self.game.played_games else self.game.RED
+            self.binarize_color = self.game.WHITE if 'binarize' not in self.game.played_games else self.game.RED
+            self.encrypter_color = self.game.WHITE if 'encrypter' not in self.game.played_games else self.game.RED
+            self.math_champ_color = self.game.WHITE if 'math_champ' not in self.game.played_games else self.game.RED
 
-            self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center')
+            self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center', color=self.game.RED)
             self.game.draw_text('Rock Paper Scissors', 20, self.rpsx, self.rpsy, color=self.rps_color)
             self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany, color=self.hangman_color)
             self.game.draw_text('Binarize in dev', 20, self.binarizex, self.binarizey, color=self.binarize_color, font=self.game.second_font)
             self.game.draw_text('Encrypter in dev', 20, self.encrypterx, self.encryptery, color=self.encrypter_color, font=self.game.second_font)
             self.game.draw_text('Math Champ in dev', 20, self.math_champx, self.math_champy, color=self.math_champ_color, font=self.game.second_font)
 
-            self.draw_cursor(color=self.game.BLACK)
+            self.draw_cursor(color=self.game.WHITE)
             self.blit_screen()
 
     def move_cursor(self) -> None:
