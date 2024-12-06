@@ -99,7 +99,6 @@ class Game:
                 if self.game_mode not in self.played_games:
                     self.played_games.append(self.game_mode)
 
-                # todo fix 2 if more games available
                 if len(self.played_games) >= self.total_games:
                     self.playing = False
 
