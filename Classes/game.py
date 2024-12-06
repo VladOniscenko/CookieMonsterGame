@@ -443,7 +443,7 @@ class Game:
                 y_offset = 50
 
                 self.draw_text(
-                    'YOU WIN! HERE ARE YOUR LETTERS: ' + new_letters,
+                    'YOU WON THIS TIME! HERE ARE YOUR LETTERS: ' + new_letters,
                     50,
                     self.mid_w,
                     y_start + y_offset,
@@ -451,6 +451,17 @@ class Game:
                     position='center',
                     color=self.WHITE
                 )
+
+                self.draw_text(
+                    'PRESS ENTER TO CONTINUE >>',
+                    20,
+                    self.mid_w,
+                    y_start + y_offset + 300,
+                    font=self.second_font,
+                    position='center',
+                    color=self.WHITE
+                )
+
                 self.blit_screen()
 
         else:
@@ -465,10 +476,20 @@ class Game:
                 y_offset = 50
 
                 self.draw_text(
-                    'YOU LOSE',
+                    'HAHAH I AM COMING CLOSER',
                     50,
                     self.mid_w,
                     y_start + y_offset,
+                    font=self.second_font,
+                    position='center',
+                    color=self.BLACK
+                )
+
+                self.draw_text(
+                    'PRESS ENTER TO CONTINUE >>',
+                    20,
+                    self.mid_w,
+                    y_start + y_offset + 300,
                     font=self.second_font,
                     position='center',
                     color=self.BLACK
