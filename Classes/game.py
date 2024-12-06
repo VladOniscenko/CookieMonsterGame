@@ -437,7 +437,7 @@ class Game:
                 self.check_events()
                 if self.START_KEY:
                     self.display_winscreen = False
-                self.display.fill(self.WHITE)
+                self.display.fill(self.BLACK)
 
                 y_start = 250
                 y_offset = 50
@@ -449,7 +449,7 @@ class Game:
                     y_start + y_offset,
                     font=self.second_font,
                     position='center',
-                    color=self.BLACK
+                    color=self.WHITE
                 )
                 self.blit_screen()
 
@@ -500,14 +500,14 @@ class Game:
 
     def win_dialog(self):
         win_text =  'PASSWORD IS CORRECT!' if self.correct_password() else 'PASSWORD IS INCORRECT!'
-        win_color =  self.BLACK if self.correct_password() else self.RED
+        win_color =  self.GREEN if self.correct_password() else self.RED
         self.run_win_dialog = True
         while self.run_win_dialog:
             self.check_events()
             if self.START_KEY:
                 self.run_win_dialog = False
 
-            self.display.fill(self.WHITE)
+            self.display.fill(self.BLACK)
 
             self.draw_text(
                 win_text,
