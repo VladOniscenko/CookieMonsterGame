@@ -77,7 +77,6 @@ class Game:
         self.pre_story()
 
         while self.playing:
-            self.display.fill(self.WHITE)
             self.check_events()
             self.cur_game = False
 

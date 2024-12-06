@@ -177,7 +177,7 @@ class RPSGame(MainGame):
         self.show_animation = False
 
         self.result_text = {
-            None: ('Tie', self.game.BLACK),
+            None: ('Tie', self.game.WHITE),
             True: ('You Win', self.game.GREEN),
             False: ('You Lose', self.game.RED)
         }
@@ -326,7 +326,7 @@ class RPSGame(MainGame):
 
         start_time = time.time()
         while time.time() - start_time < 2:
-            self.game.display.fill(self.game.WHITE)
+            self.game.display.fill(self.game.BLACK)
 
             # display right and left large hand selected by user and game
             self.options[f'r_{self.state}'].draw()
@@ -407,7 +407,7 @@ class RPSGame(MainGame):
             self.r_rock.rect.y = original_right_y - offset
 
             # Render the updated positions
-            self.game.display.fill(self.game.WHITE)
+            self.game.display.fill(self.game.BLACK)
             self.display_large_hands()
             self.blit_screen()
 
