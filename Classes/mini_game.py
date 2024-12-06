@@ -287,7 +287,7 @@ class RPSGame(MainGame):
         self.run_display = True
         while self.run_display:
             self.user_selected = False
-            self.game.display.fill(self.game.WHITE)
+            self.game.display.fill(self.game.BLACK)
 
             self.random_option = random.choice(RPS_OPTIONS)
             self.display_menu()
