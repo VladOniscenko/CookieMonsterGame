@@ -129,7 +129,7 @@ class MainGame:
             if self.game.START_KEY:
                 self.show_rules = False
 
-            self.game.display.fill(self.game.WHITE)
+            self.game.display.fill(self.game.BLACK)
 
             for idx, line in enumerate(lines):
                 y = (self.mid_h - len(lines) *
@@ -140,6 +140,7 @@ class MainGame:
                     self.mid_w,
                     y,
                     font=self.game.second_font,
+                    color=self.game.WHITE,
                     position='center'
                 )
 
@@ -149,6 +150,7 @@ class MainGame:
                 self.mid_w,
                 self.mid_h - 200,
                 font=self.game.second_font,
+                color=self.game.RED,
                 position='center'
             )
 
