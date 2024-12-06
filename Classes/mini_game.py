@@ -1,5 +1,5 @@
 from functions import (get_image, split_text, draw_circle,
-                       draw_slanted_line, draw_vertical_line)
+                       draw_slanted_line, draw_vertical_line, draw_rect)
 from dataclasses import dataclass
 import random
 import time
@@ -764,3 +764,143 @@ class HangmanGame(MainGame):
                      ],
         }
         return random.choice(words[difficulty])
+
+
+class MathChampGame(MainGame):
+    def __init__(self, game):
+        MainGame.__init__(self, game)
+        self.is_winner = False
+        self.question, self.answer, self.correct_key, self.options = None, None, None, None
+        self.a, self.b, self.c, self.d = False, False, False, False
+
+    def play(self) -> None:
+        self.generate_equation(self.game.difficulty)
+        while self.run_display:
+            self.check_input()
+            self.game.display.fill(self.game.BLACK)
+
+            self.draw_options()
+            self.draw_helper()
+            self.did_user_win()
+
+            self.blit_screen()
+
+    def check_input(self) -> None:
+        self.game.check_events()
+        if 'a' in self.game.OTHER_KEY:
+            self.a = True
+        elif 'b' in self.game.OTHER_KEY:
+            self.b = True
+        elif 'c' in self.game.OTHER_KEY:
+            self.c = True
+        elif 'd' in self.game.OTHER_KEY:
+            self.d = True
+
+        if self.a or self.b or self.d or self.d:
+            self.run_display = False
+
+    def did_user_win(self):
+        if self.a and self.correct_key == 'A':
+            self.is_winner = True
+        if self.b and self.correct_key == 'B':
+            self.is_winner = True
+        if self.c and self.correct_key == 'C':
+            self.is_winner = True
+        if self.d and self.correct_key == 'D':
+            self.is_winner = True
+
+    def draw_options(self):
+        options_rects = [
+            {"pos": (100, 100), "size": (200, 50), "text": "A "},
+            {"pos": (100, 200), "size": (200, 50), "text": "B "},
+            {"pos": (100, 300), "size": (200, 50), "text": "C "},
+            {"pos": (100, 400), "size": (200, 50), "text": "D "},
+        ]
+
+        # Display the question text
+        self.game.draw_text(
+            f'What is {self.question}?', 40,
+            self.game.DISPLAY_W / 2, 50,
+            color=self.game.ORANGE, position='center', font=self.game.second_font
+        )
+
+
+        # Draw the options
+        for i, option in enumerate(options_rects):
+            key = list(self.options.keys())[i]
+            text = f"{key}: {self.options[key]}"
+
+            # Draw the rectangle
+            draw_rect(
+                self.game.display,
+                option["pos"],
+                option["size"],
+                self.game.BLACK,
+                border_thickness=2,
+                border_color=self.game.WHITE,
+            )
+
+            # Add text inside the rectangle
+            x, y = (option["pos"][0] + 10, option["pos"][1] + 10)  # Adjust text position
+            self.game.draw_text(text, 25, x, y, color=self.game.WHITE, font=self.game.second_font)
+
+    def draw_helper(self):
+        values = {
+            "A": 2,
+            "B": 3,
+            "C": 5,
+            "D": 7,
+            "E": 11
+        }
+
+        # Calculations to display
+        calculations = [
+            f'A + A = {values["A"] + values["A"]}',
+            f'B + A = {values["B"] + values["A"]}',
+            f'B + C = {values["B"] + values["C"]}',
+            f'C + D = {values["D"] + values["C"]}',
+            f'D + E = {values["D"] + values["E"]}'
+        ]
+
+        for i, calc in enumerate(calculations, 1):
+            self.game.draw_text(calc, 25, self.game.DISPLAY_W - 150, (i * 50), color=self.game.WHITE, font=self.game.second_font)
+
+    def generate_equation(self, game_mode):
+        values = {
+            "A": 2,
+            "B": 3,
+            "C": 5,
+            "D": 7,
+            "E": 11
+        }
+
+        questions = {
+            'easy': 2,
+            'medium': 3,
+            'hard': 4
+        }
+        num_variables = questions[game_mode]
+        chosen_vars = random.sample(list(values.items()), num_variables)
+
+        equation_str = " + ".join([f"{var}" for var, _ in chosen_vars])
+        equation_result = sum([val for _, val in chosen_vars])
+
+        options = set()
+        while len(options) < 3:
+            incorrect = random.randint(equation_result - 4, equation_result + 4)
+            if incorrect != equation_result:
+                options.add(incorrect)
+
+        options = list(options)
+        options.append(equation_result)
+        random.shuffle(options)
+
+        self.options = {
+            "A": options[0],
+            "B": options[1],
+            "C": options[2],
+            "D": options[3],
+        }
+
+        correct_option_key = list(self.options.keys())[options.index(equation_result)]
+        self.question, self.answer, self.correct_key = equation_str, equation_result, correct_option_key

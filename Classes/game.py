@@ -6,7 +6,7 @@ import random
 import math
 
 from Classes.menu import MainMenu, DifficultyMenu, MiniGameMenu
-from Classes.mini_game import RPSGame, HangmanGame
+from Classes.mini_game import RPSGame, HangmanGame, MathChampGame
 from Classes.rating import Rating
 
 
@@ -22,7 +22,8 @@ class Game:
         self.guessed_characters = []
         self.password = 'challenge'
         self.pass_list = list(self.password)
-        self.amount_games_unplayed = 2
+        self.total_games = 3
+        self.amount_games_unplayed = 3
         self.played_games = []
         self.inputted_chars = []
         self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
@@ -44,7 +45,6 @@ class Game:
         self.game_mode = False
         self.difficulty = False
 
-        # todo enable music
         self.sound = self.play_music('main.wav', 99, 90, 20)
 
         # Styling
@@ -62,7 +62,7 @@ class Game:
         self.hangman_game = HangmanGame(self)
         self.binarize_game = None
         self.encrypter_game = None
-        self.math_champ_game = None
+        self.math_champ_game = MathChampGame(self)
 
         self.game_controller = None
 
@@ -100,7 +100,7 @@ class Game:
                     self.played_games.append(self.game_mode)
 
                 # todo fix 2 if more games available
-                if len(self.played_games) >= 2:
+                if len(self.played_games) >= self.total_games:
                     self.playing = False
 
                 self.win_logic(self.game_controller.is_winner)
@@ -199,7 +199,8 @@ class Game:
                 raise FileNotFoundError(f"Asset path not found for {file_path}")
 
             pygame.mixer.music.load(path)  # Load the music file
-            pygame.mixer.music.set_volume(volume)  # Set default volume
+            # pygame.mixer.music.set_volume(volume)  # Set default volume
+            pygame.mixer.music.set_volume(0)  # Set default volume
             pygame.mixer.music.play(loops, start, fade)  # Play the music
 
             if not play:
@@ -226,7 +227,7 @@ class Game:
 
     def show_rules(self) -> None:
         # stop playing any music
-        if self.sound.music:
+        if self.sound and self.sound.music:
             self.sound.music.pause()
 
         # Rules text
@@ -422,7 +423,7 @@ class Game:
 
     def win_logic(self, has_user_won: bool):
         if has_user_won:
-            amount_letters = len(self.pass_list) //self.amount_games_unplayed
+            amount_letters = len(self.pass_list) // self.amount_games_unplayed
             self.amount_games_unplayed -= 1
             new_letters = ""
 
@@ -505,7 +506,7 @@ class Game:
 
         self.total_score = 0
         self.guessed_characters = []
-        self.amount_games_unplayed = 2
+        self.amount_games_unplayed = 3
         self.pass_list = list(self.password)
         self.cur_game = None
         self.game_controller = None
@@ -514,7 +515,7 @@ class Game:
         self.hangman_game = HangmanGame(self)
         self.binarize_game = None
         self.encrypter_game = None
-        self.math_champ_game = None
+        self.math_champ_game = MathChampGame(self)
 
     def correct_password(self) -> bool:
         return ''.join(self.inputted_chars) == self.password

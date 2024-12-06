@@ -72,3 +72,15 @@ def draw_slanted_line(display, start, offset, thickness, color):
         (start[0] + offset[0], start[1] + offset[1]),
         thickness
     )
+
+
+def draw_rect(display, pos, size, color, border_thickness=0, border_color=None):
+    rect = pygame.Rect(pos, size)
+
+    # Draw the rectangle fill
+    pygame.draw.rect(display, color, rect)
+
+    # Draw the border if specified
+    if border_thickness > 0:
+        border_color = border_color or color
+        pygame.draw.rect(display, border_color, rect, border_thickness)
