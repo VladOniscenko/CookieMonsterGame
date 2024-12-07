@@ -125,10 +125,11 @@ class Game:
 
         self.end_time = int(time.time())
 
-        # todo show time and score
+        # show user score and time
         self.show_score()
 
-        # todo save time and score
+        # save score to csv
+        self.rating.save_rating('vlad', self.end_time - self.start_time, self.difficulty, self.get_score())
 
         # reset game
         self.reset()
@@ -556,6 +557,9 @@ class Game:
 
         # Calculate the score
         score = ((self.total_score * 1000) - ((self.end_time - self.start_time) * 0.1)) * mod[self.difficulty]
+
+        if self.correct_password():
+            score += 1000
 
         # Ensure the score is non-negative
         return max(0, int(score))

@@ -13,6 +13,8 @@ def main():
         # clock speed Frames Per Second
         clock.tick(g.FPS)
 
+        # todo ask for name
+
         # display selection menu
         g.main_menu.display_menu()
 

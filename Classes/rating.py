@@ -69,3 +69,8 @@ class Rating:
         if self.game.BACK_KEY or self.game.ESC_KEY:
             self.game.main_menu.run_display = True
             self.run_display = False
+
+    def save_rating(self, name, time, difficulty, score):
+        with open(get_asset_path('Other', 'scoreboard.csv'), mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([name, score, time, difficulty])
