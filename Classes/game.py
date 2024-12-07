@@ -1,12 +1,10 @@
 from pygame.draw_py import draw_line
-from pygame.examples.moveit import WIDTH
 
 from functions import get_asset_path
 import pygame
 import time
 import sys
 import random
-import math
 
 from Classes.menu import MainMenu, DifficultyMenu, MiniGameMenu
 from Classes.mini_game import RPSGame, HangmanGame, MathChampGame
@@ -115,7 +113,6 @@ class Game:
                     self.playing = False
 
                 self.win_logic(self.game_controller.is_winner)
-
 
             self.window.blit(self.display,  (0, 0))
             pygame.display.update()
@@ -359,7 +356,6 @@ class Game:
             if self.START_KEY and len(self.inputted_chars) == len(self.password):
                 self.guessing_password = False
 
-
             self.display.fill(self.BLACK)
             self.draw_text('GUESS THE PASSWORD', 20, self.DISPLAY_W / 2, 100, color=self.WHITE, position='center')
             self.draw_text(' '.join(self.guessed_characters), 20, self.DISPLAY_W / 2, 200, color=self.ORANGE, position='center', font=self.second_font)
@@ -415,7 +411,6 @@ class Game:
             )
 
         self.proceed('SUBMIT')
-
 
     def win_logic(self, has_user_won: bool):
         if has_user_won:
@@ -502,8 +497,8 @@ class Game:
         return ''.join(self.inputted_chars) == self.password
 
     def win_dialog(self):
-        win_text =  'PASSWORD IS CORRECT!' if self.correct_password() else 'PASSWORD IS INCORRECT!'
-        win_color =  self.GREEN if self.correct_password() else self.RED
+        win_text = 'PASSWORD IS CORRECT!' if self.correct_password() else 'PASSWORD IS INCORRECT!'
+        win_color = self.GREEN if self.correct_password() else self.RED
         self.run_win_dialog = True
         while self.run_win_dialog:
             self.check_events()
@@ -525,7 +520,7 @@ class Game:
             self.proceed()
             self.blit_screen()
 
-    def proceed(self, act = 'CONTINUE'):
+    def proceed(self, act='CONTINUE'):
         self.draw_text(
             f'PRESS ENTER TO {act} >>',
             20,

@@ -814,7 +814,6 @@ class MathChampGame(MainGame):
             color=self.game.ORANGE, position='center', font=self.game.second_font
         )
 
-
         # Draw the options
         for i, option in enumerate(options_rects):
             key = list(self.options.keys())[i]
