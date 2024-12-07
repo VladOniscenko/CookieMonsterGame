@@ -165,7 +165,8 @@ class Game:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
+            
+            # activate action buttons
             if event.type == pygame.KEYDOWN:
                 self.START_KEY = event.key == pygame.K_RETURN
                 self.BACK_KEY = event.key == pygame.K_BACKSPACE
@@ -285,7 +286,6 @@ class Game:
                 self.draw_text(line, 30, self.mid_w, y_start + (y_offset * i), color=self.WHITE, position='center', font=self.second_font)
 
             self.proceed('START')
-
             self.blit_screen()
 
     def pre_story(self) -> None:
@@ -372,7 +372,6 @@ class Game:
             self.draw_text(' '.join(self.guessed_characters), 20, self.DISPLAY_W / 2, 200, color=self.ORANGE, position='center', font=self.second_font)
 
             self.draw_password_lines(self.inputted_chars)
-
             self.blit_screen()
 
     def draw_password_lines(self, inputted_chars: list[str]) -> None:
@@ -533,6 +532,12 @@ class Game:
             self.blit_screen()
 
     def proceed(self, act='CONTINUE'):
+        """ Display text call to action for user
+        Parameters
+        ----------
+        act : str, optional
+            The action phrase to display in the prompt message. Default is 'CONTINUE'.
+        """
         self.draw_text(
             f'PRESS ENTER TO {act} >>',
             20,
@@ -585,6 +590,9 @@ class Game:
         return max(0, int(score))
 
     def ask_name(self):
+        """
+        Ask user for his name
+        """
         self.asking_name = True
         name = []
         while self.asking_name:
