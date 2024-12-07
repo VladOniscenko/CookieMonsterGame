@@ -581,7 +581,7 @@ class Game:
             if self.START_KEY and len(name) > 2:
                 self.asking_name = False
                 self.user_name = ''.join(name)
-            elif self.BACK_KEY:
+            elif self.BACK_KEY and len(name) > 0:
                 name.pop()
 
             for char in self.OTHER_KEY:
