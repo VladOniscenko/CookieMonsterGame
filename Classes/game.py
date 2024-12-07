@@ -216,8 +216,7 @@ class Game:
                 raise FileNotFoundError(f"Asset path not found for {file_path}")
 
             pygame.mixer.music.load(path)  # Load the music file
-            # pygame.mixer.music.set_volume(volume)  # Set default volume
-            pygame.mixer.music.set_volume(0)  # Set default volume
+            pygame.mixer.music.set_volume(volume)  # Set default volume
             pygame.mixer.music.play(loops, start, fade)  # Play the music
 
             if not play:
