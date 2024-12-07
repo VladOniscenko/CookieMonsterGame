@@ -786,7 +786,7 @@ class MathChampGame(MainGame):
         elif 'd' in self.game.OTHER_KEY:
             self.d = True
 
-        if self.a or self.b or self.d or self.d:
+        if self.a or self.b or self.c or self.d:
             self.run_display = False
 
     def did_user_win(self):
