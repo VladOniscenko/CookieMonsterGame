@@ -141,6 +141,11 @@ class Game:
         self.reset()
 
     def check_events(self) -> None:
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            self.draw_text('THERE IS NO WAY BACK', 10, 20, 20, color=self.RED)
+            self.blit_screen()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
