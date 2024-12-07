@@ -19,11 +19,11 @@ class Game:
 
         # screen setup
         self.sound = self.play_music('main.wav', 99, 90, 20)
+        self.WIDTH, self.HEIGHT = 1280, 720
         self.display = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.mid_w, self.mid_h = self.DISPLAY_W / 2, self.DISPLAY_H / 2
-        self.WIDTH, self.HEIGHT = 1280, 720
         self.FPS = 60
 
         # password
@@ -108,7 +108,7 @@ class Game:
 
             # select game
             self.mini_game_menu.display_menu()
-            self.game_controller = self.get_game_controller()
+            self.game_controller = self.get_game_controller(self.game_mode)
 
             if self.game_controller:
                 # set game rules, title, attempts etc.
@@ -243,7 +243,7 @@ class Game:
 
         return pygame.mixer
 
-    def get_game_controller(self) -> RPSGame | HangmanGame | MathChampGame | BinaryConversionGame | WordDecryptionGame | None:
+    def get_game_controller(self, game_mode: str | bool) -> RPSGame | HangmanGame | MathChampGame | BinaryConversionGame | WordDecryptionGame | None:
         controllers = {
             'rps': self.rps_game,
             'hangman': self.hangman_game,
@@ -252,7 +252,7 @@ class Game:
             'binarize': self.binarize_game,
         }
     
-         return controllers.get(self.game_mode, None)
+        return controllers.get(game_mode, None)
 
     def show_rules(self) -> None:
         # stop playing any music
