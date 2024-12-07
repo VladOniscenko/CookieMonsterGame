@@ -1,3 +1,5 @@
+from pygame.examples.moveit import WIDTH
+
 from functions import get_asset_path
 import pygame
 import time
@@ -17,7 +19,7 @@ class Game:
 
         self.guessing_password = False
         self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
-
+        self.display_score = None
         self.total_score = 0
         self.guessed_characters = []
         self.password = 'challenge'
@@ -39,7 +41,7 @@ class Game:
         self.mid_w, self.mid_h = self.DISPLAY_W / 2, self.DISPLAY_H / 2
 
         # Reference values
-        self.running, self.playing, self.game_mode, self.start_time = True, False, False, False
+        self.running, self.playing, self.game_mode, self.start_time, self.end_time = True, False, False, False, False
         self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
 
         self.game_mode = False
@@ -121,7 +123,10 @@ class Game:
         # and display result of it
         self.win_dialog()
 
+        self.end_time = int(time.time())
+
         # todo show time and score
+        self.show_score()
 
         # todo save time and score
 
@@ -216,7 +221,7 @@ class Game:
 
         return pygame.mixer
 
-    def get_game_controller(self) -> RPSGame | HangmanGame | None:
+    def get_game_controller(self) -> RPSGame | HangmanGame | MathChampGame | None:
         if self.game_mode == 'rps':
             return self.rps_game
         elif self.game_mode == 'hangman':
@@ -466,6 +471,7 @@ class Game:
 
         self.guessing_password = False
         self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
+        self.start_time, self.end_time = False, False
 
         self.total_score = 0
         self.guessed_characters = []
@@ -504,6 +510,7 @@ class Game:
                 color=win_color
             )
 
+            self.proceed()
             self.blit_screen()
 
     def proceed(self, act = 'CONTINUE'):
@@ -516,3 +523,40 @@ class Game:
             position='center',
             color=self.RED
         )
+
+    def show_score(self):
+        self.display_score = True
+        while self.display_score:
+            self.check_events()
+            self.display.fill(self.BLACK)
+
+            if self.START_KEY:
+                self.display_score = False
+
+            col1_x = self.DISPLAY_W / 4
+            col2_x = col1_x * 3
+
+            # print time
+            self.draw_text('Time played', 20, col1_x, 200, color=self.WHITE, position='center')
+            self.draw_text(f'{self.end_time - self.start_time}', 20, col1_x, 300, color=self.ORANGE, position='center')
+
+
+            # print score
+            self.draw_text('Score gained', 20, col2_x, 200, color=self.WHITE, position='center')
+            self.draw_text(f'{self.get_score()}', 20, col2_x, 300, color=self.ORANGE, position='center')
+
+            self.proceed('GO TO MAIN MENU')
+            self.blit_screen()
+
+    def get_score(self) -> int:
+        mod = {
+            'easy': 1,
+            'medium': 2,
+            'hard': 3
+        }
+
+        # Calculate the score
+        score = ((self.total_score * 1000) - ((self.end_time - self.start_time) * 0.1)) * mod[self.difficulty]
+
+        # Ensure the score is non-negative
+        return max(0, int(score))
