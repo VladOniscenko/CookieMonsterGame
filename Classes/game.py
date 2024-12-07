@@ -497,7 +497,8 @@ class Game:
         return ''.join(self.inputted_chars) == self.password
 
     def win_dialog(self):
-        win_text = 'PASSWORD IS CORRECT!' if self.correct_password() else 'PASSWORD IS INCORRECT!'
+        is_winner = self.correct_password()
+        win_text = 'PASSWORD IS CORRECT!' if is_winner else 'PASSWORD IS INCORRECT!'
         win_color = self.GREEN if self.correct_password() else self.RED
         self.run_win_dialog = True
         while self.run_win_dialog:
@@ -542,6 +543,8 @@ class Game:
 
             col1_x = self.DISPLAY_W / 4
             col2_x = col1_x * 3
+
+            self.draw_text('GAME OVER', 30, self.DISPLAY_W / 2, 100, color=self.RED, position='center')
 
             # print time
             self.draw_text('Time played', 20, col1_x, 200, color=self.WHITE, position='center')
