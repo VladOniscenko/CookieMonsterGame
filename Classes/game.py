@@ -1,3 +1,4 @@
+from pygame.draw_py import draw_line
 from pygame.examples.moveit import WIDTH
 
 from functions import get_asset_path
@@ -14,6 +15,8 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
+        self.user_name = None
+        self.asking_name = None
         pygame.init()
         pygame.mixer.init()
 
@@ -72,6 +75,9 @@ class Game:
         if not self.playing:
             return
 
+        # ask for name
+        self.ask_name()
+
         # play pre story
         self.show_rules()
 
@@ -129,7 +135,7 @@ class Game:
         self.show_score()
 
         # save score to csv
-        self.rating.save_rating('vlad', self.end_time - self.start_time, self.difficulty, self.get_score())
+        self.rating.save_rating(self.user_name, self.end_time - self.start_time, self.difficulty, self.get_score())
 
         # reset game
         self.reset()
@@ -470,6 +476,7 @@ class Game:
         self.played_games = []
         self.inputted_chars = []
 
+        self.user_name = False
         self.guessing_password = False
         self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
         self.start_time, self.end_time = False, False
@@ -563,3 +570,37 @@ class Game:
 
         # Ensure the score is non-negative
         return max(0, int(score))
+
+    def ask_name(self):
+        self.asking_name = True
+        name = []
+        while self.asking_name:
+            self.check_events()
+            self.display.fill(self.BLACK)
+
+            if self.START_KEY and len(name) > 2:
+                self.asking_name = False
+                self.user_name = ''.join(name)
+            elif self.BACK_KEY:
+                name.pop()
+
+            for char in self.OTHER_KEY:
+                if char in self.alphabet:
+                    name.append(char)
+
+            self.draw_text('INPUT YOUR NAME', 20, self.DISPLAY_W / 2, 200, color=self.RED, position='center')
+
+            # Draw centered line
+            center_x = self.DISPLAY_W / 2
+            center_y = self.DISPLAY_H / 2
+            line_length = 400  # Adjust as needed for the desired length
+
+            # Ensure coordinates are integers
+            start_point = (int(center_x - line_length / 2), int(center_y))
+            end_point = (int(center_x + line_length / 2), int(center_y))
+
+            self.draw_text(''.join(name), 25, center_x, center_y - 50, color=self.WHITE, position='center')
+            draw_line(self.display, self.WHITE, start_point, end_point, 2)
+
+            self.proceed()
+            self.blit_screen()

@@ -13,16 +13,14 @@ def main():
         # clock speed Frames Per Second
         clock.tick(g.FPS)
 
-        # todo ask for name
+        # display rating scoreboard
+        g.rating.display_rating()
 
         # display selection menu
         g.main_menu.display_menu()
 
         # display selection menu
         g.difficulties.display_menu()
-
-        # display rating scoreboard
-        g.rating.display_rating()
 
         # main game loop
         g.game_loop()
