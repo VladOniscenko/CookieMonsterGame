@@ -261,7 +261,7 @@ class Game:
             y_offset = 40
             y_start = 250
 
-            self.draw_text("Game Rules:", 40, self.mid_w, y_start - y_offset, color=self.WHITE, position='center', font=self.second_font)
+            self.draw_text("Game Rules:", 40, self.mid_w, y_start - y_offset, color=self.RED, position='center', font=self.second_font)
             for i, line in enumerate(rules):
                 self.draw_text(line, 30, self.mid_w, y_start + (y_offset * i), color=self.WHITE, position='center', font=self.second_font)
 
