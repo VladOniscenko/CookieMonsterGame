@@ -153,17 +153,7 @@ class MainGame:
                 color=self.game.RED,
                 position='center'
             )
-
-            self.game.draw_text(
-                'PRESS ENTER TO PLAY >>',
-                font_size,
-                self.mid_w,
-                self.mid_h + 200,
-                font=self.game.second_font,
-                position='center',
-                color=self.game.RED
-            )
-
+            self.game.proceed('PLAY')
             self.blit_screen()
 
 

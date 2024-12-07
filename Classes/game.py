@@ -95,6 +95,10 @@ class Game:
                 # play the game
                 self.game_controller.play()
 
+                # add score
+                if self.game_controller.is_winner:
+                    self.total_score += 1
+
                 # process after game
                 if self.game_mode not in self.played_games:
                     self.played_games.append(self.game_mode)
@@ -118,6 +122,8 @@ class Game:
         self.win_dialog()
 
         # todo show time and score
+
+        # todo save time and score
 
         # reset game
         self.reset()
@@ -254,15 +260,7 @@ class Game:
             for i, line in enumerate(rules):
                 self.draw_text(line, 30, self.mid_w, y_start + (y_offset * i), color=self.WHITE, position='center', font=self.second_font)
 
-            self.draw_text(
-                'PRESS ENTER TO START >>',
-                50,
-                self.mid_w,
-                y_start + (y_offset * len(rules)) + 50,
-                font=self.second_font,
-                position='center',
-                color=self.RED
-            )
+            self.proceed('START')
 
             self.blit_screen()
 
@@ -322,16 +320,7 @@ class Game:
                     font=self.second_font
                 )
 
-            self.draw_text(
-                'PRESS ENTER TO SKIP >>',
-                50,
-                self.mid_w,
-                y_start + (y_offset * (len(story) + 2)),
-                font=self.second_font,
-                position='center',
-                color=self.RED
-            )
-
+            self.proceed('SKIP')
             self.blit_screen()
 
     def blit_screen(self) -> None:
@@ -409,15 +398,7 @@ class Game:
                 position='topleft'
             )
 
-        self.draw_text(
-            'PRESS ENTER TO SUBMIT >>',
-            f_size,
-            self.DISPLAY_W / 2,
-            600,
-            color=self.RED,
-            position='center',
-            font=self.second_font
-        )
+        self.proceed('SUBMIT')
 
 
     def win_logic(self, has_user_won: bool):
@@ -452,16 +433,7 @@ class Game:
                     color=self.WHITE
                 )
 
-                self.draw_text(
-                    'PRESS ENTER TO CONTINUE >>',
-                    20,
-                    self.mid_w,
-                    y_start + y_offset + 300,
-                    font=self.second_font,
-                    position='center',
-                    color=self.WHITE
-                )
-
+                self.proceed('CONTINUE')
                 self.blit_screen()
 
         else:
@@ -485,15 +457,7 @@ class Game:
                     color=self.BLACK
                 )
 
-                self.draw_text(
-                    'PRESS ENTER TO CONTINUE >>',
-                    20,
-                    self.mid_w,
-                    y_start + y_offset + 300,
-                    font=self.second_font,
-                    position='center',
-                    color=self.BLACK
-                )
+                self.proceed('CONTINUE')
                 self.blit_screen()
 
     def reset(self):
@@ -541,3 +505,14 @@ class Game:
             )
 
             self.blit_screen()
+
+    def proceed(self, act = 'CONTINUE'):
+        self.draw_text(
+            f'PRESS ENTER TO {act} >>',
+            20,
+            self.mid_w,
+            self.HEIGHT - 200,
+            font=self.second_font,
+            position='center',
+            color=self.RED
+        )
