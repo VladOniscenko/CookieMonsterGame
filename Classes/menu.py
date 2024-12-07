@@ -209,8 +209,8 @@ class MiniGameMenu(Menu):
             self.game.draw_text('SELECT MINI GAME', 30, self.mid_w, self.mid_h - 250, position='center', color=self.game.RED)
             self.game.draw_text('Rock Paper Scissors', 20, self.rpsx, self.rpsy, color=self.rps_color)
             self.game.draw_text('Hangman', 20, self.hangmanx, self.hangmany, color=self.hangman_color)
-            self.game.draw_text('Binarize in dev', 20, self.binarizex, self.binarizey, color=self.binarize_color, font=self.game.second_font)
-            self.game.draw_text('Encrypter in dev', 20, self.encrypterx, self.encryptery, color=self.encrypter_color, font=self.game.second_font)
+            self.game.draw_text('Binarize', 20, self.binarizex, self.binarizey, color=self.binarize_color)
+            self.game.draw_text('Encrypter', 20, self.encrypterx, self.encryptery, color=self.encrypter_color)
             self.game.draw_text('Math Champ', 20, self.math_champx, self.math_champy, color=self.math_champ_color)
 
             self.draw_cursor(color=self.game.WHITE)

@@ -971,13 +971,18 @@ class BinaryConversionGame(QuizGame):
 
         # Helper display
         helper_text = [
-            f"Binary {binary_example} = Decimal {decimal_example}",
-            "Each binary digit represents a power of 2:",
-            f"  1 (8) + 0 (4) + 1 (2) + 1 (1) = {decimal_example}"
+            f"Hint: Binary {binary_example} = Decimal {decimal_example}.",
+            "Each binary digit (bit) represents a power of 2, starting from the right:",
+            "For example, from right to left:",
+            f"  1 (2^3) + 0 (2^2) + 1 (2^1) + 1 (2^0) = {decimal_example}",
+            "Step-by-step: Start with the rightmost bit and multiply it by 2^0, the next by 2^1, and so on.",
+            "Then, add up the results to get the decimal value.",
+            "For binary 1011, you get: 1*8 + 0*4 + 1*2 + 1*1 = 11 in decimal.",
+            "Remember: 1 represents 'on' (or 'true'), and 0 represents 'off' (or 'false')."
         ]
 
         for i, text in enumerate(helper_text, 1):
-            self.game.draw_text(text, 25, self.game.DISPLAY_W - 50, (i * 50) + 50, color=self.game.WHITE, font=self.game.second_font, position='topright')
+            self.game.draw_text(text, 20, self.game.DISPLAY_W - 50, (i * 30) + 50, color=self.game.WHITE, font=self.game.second_font, position='topright')
 
 
 class WordDecryptionGame(QuizGame):
@@ -1062,10 +1067,18 @@ class WordDecryptionGame(QuizGame):
 
         # Explain hexadecimal encoding
         hints = [
-            "Hint: Each pair represents a character encoded in hexadecimal.",
-            "Hint: A=1, B=2, C=3... F=15."
+            "Hint: Hexadecimal encoding uses numbers 0-9 ",
+            "and letters A-F to represent values.",
+            "Hint: Each hexadecimal value corresponds to a character,",
+            " where 'A' = 1, 'B' = 2, and so on.",
+            "Hint: Convert each hex digit to its decimal equivalent and",
+            " then map it to the corresponding letter in the alphabet.",
+            "Tip: For example, 'A' in hexadecimal is 1 in decimal,",
+            " 'B' is 2, 'C' is 3, and so on until 'F' = 15.",
+            "Tip: If you see something like 'D-9-E-5',",
+            " try converting each value separately and then combine the results to form a word."
         ]
 
         for i, hint in enumerate(hints, 1):
-            self.game.draw_text(hint, 25, self.game.DISPLAY_W - 50, (i * 50) + 50, color=self.game.WHITE, font=self.game.second_font, position='topright')
+            self.game.draw_text(hint, 20, self.game.DISPLAY_W - 50, (i * 30) + 50, color=self.game.WHITE, font=self.game.second_font, position='topright')
 
