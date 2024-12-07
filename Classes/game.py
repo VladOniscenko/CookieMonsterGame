@@ -7,7 +7,7 @@ import sys
 import random
 
 from Classes.menu import MainMenu, DifficultyMenu, MiniGameMenu
-from Classes.mini_game import RPSGame, HangmanGame, MathChampGame
+from Classes.mini_game import RPSGame, HangmanGame, MathChampGame, BinaryConversionGame, WordDecryptionGame
 from Classes.rating import Rating
 
 
@@ -25,8 +25,8 @@ class Game:
         self.guessed_characters = []
         self.password = 'challenge'
         self.pass_list = list(self.password)
-        self.total_games = 3
-        self.amount_games_unplayed = 3
+        self.total_games = 5
+        self.amount_games_unplayed = 5
         self.played_games = []
         self.inputted_chars = []
         self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
@@ -63,8 +63,8 @@ class Game:
 
         self.rps_game = RPSGame(self)
         self.hangman_game = HangmanGame(self)
-        self.binarize_game = None
-        self.encrypter_game = None
+        self.binarize_game = BinaryConversionGame(self)
+        self.encrypter_game = WordDecryptionGame(self)
         self.math_champ_game = MathChampGame(self)
 
         self.game_controller = None
@@ -229,7 +229,7 @@ class Game:
 
         return pygame.mixer
 
-    def get_game_controller(self) -> RPSGame | HangmanGame | MathChampGame | None:
+    def get_game_controller(self) -> RPSGame | HangmanGame | MathChampGame | BinaryConversionGame | WordDecryptionGame | None:
         if self.game_mode == 'rps':
             return self.rps_game
         elif self.game_mode == 'hangman':
@@ -482,15 +482,15 @@ class Game:
 
         self.total_score = 0
         self.guessed_characters = []
-        self.amount_games_unplayed = 3
+        self.amount_games_unplayed = 5
         self.pass_list = list(self.password)
         self.cur_game = None
         self.game_controller = None
 
         self.rps_game = RPSGame(self)
         self.hangman_game = HangmanGame(self)
-        self.binarize_game = None
-        self.encrypter_game = None
+        self.binarize_game = BinaryConversionGame(self)
+        self.encrypter_game = WordDecryptionGame(self)
         self.math_champ_game = MathChampGame(self)
 
     def correct_password(self) -> bool:

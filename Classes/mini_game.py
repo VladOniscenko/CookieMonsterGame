@@ -756,26 +756,32 @@ class HangmanGame(MainGame):
         return random.choice(words[difficulty])
 
 
-class MathChampGame(MainGame):
+class QuizGame(MainGame):
     def __init__(self, game):
-        MainGame.__init__(self, game)
+        super().__init__(game)
+        self.game = game
+        self.question = None
+        self.options = None
+        self.correct_key = None
         self.is_winner = False
-        self.question, self.answer, self.correct_key, self.options = None, None, None, None
+        self.answer = None
+        self.helper = None
         self.a, self.b, self.c, self.d = False, False, False, False
 
-    def play(self) -> None:
-        self.generate_equation(self.game.difficulty)
+    def play(self):
+        """Method to be overridden in child classes if custom logic is needed."""
         while self.run_display:
             self.check_input()
             self.game.display.fill(self.game.BLACK)
 
             self.draw_options()
-            self.draw_helper()
+            self.helper()
             self.did_user_win()
 
             self.blit_screen()
 
-    def check_input(self) -> None:
+    def check_input(self):
+        """Handles input to determine which option is selected."""
         self.game.check_events()
         if 'a' in self.game.OTHER_KEY:
             self.a = True
@@ -790,16 +796,19 @@ class MathChampGame(MainGame):
             self.run_display = False
 
     def did_user_win(self):
+        """Checks if the user selected the correct option."""
         if self.a and self.correct_key == 'A':
             self.is_winner = True
-        if self.b and self.correct_key == 'B':
+        elif self.b and self.correct_key == 'B':
             self.is_winner = True
-        if self.c and self.correct_key == 'C':
+        elif self.c and self.correct_key == 'C':
             self.is_winner = True
-        if self.d and self.correct_key == 'D':
+        elif self.d and self.correct_key == 'D':
             self.is_winner = True
 
+
     def draw_options(self):
+        """Displays the question and options on the screen."""
         options_rects = [
             {"pos": (100, 100), "size": (200, 50), "text": "A "},
             {"pos": (100, 200), "size": (200, 50), "text": "B "},
@@ -807,9 +816,9 @@ class MathChampGame(MainGame):
             {"pos": (100, 400), "size": (200, 50), "text": "D "},
         ]
 
-        # Display the question text
+        # Display the question
         self.game.draw_text(
-            f'What is {self.question}?', 40,
+            f'Question: {self.question}', 40,
             self.game.DISPLAY_W / 2, 50,
             color=self.game.ORANGE, position='center', font=self.game.second_font
         )
@@ -833,28 +842,19 @@ class MathChampGame(MainGame):
             x, y = (option["pos"][0] + 10, option["pos"][1] + 10)  # Adjust text position
             self.game.draw_text(text, 25, x, y, color=self.game.WHITE, font=self.game.second_font)
 
-    def draw_helper(self):
-        values = {
-            "A": 2,
-            "B": 3,
-            "C": 5,
-            "D": 7,
-            "E": 11
-        }
 
-        # Calculations to display
-        calculations = [
-            f'A + A = {values["A"] + values["A"]}',
-            f'B + A = {values["B"] + values["A"]}',
-            f'B + C = {values["B"] + values["C"]}',
-            f'C + D = {values["D"] + values["C"]}',
-            f'D + E = {values["D"] + values["E"]}'
-        ]
+class MathChampGame(QuizGame):
+    def __init__(self, game):
+        super().__init__(game)
+        self.game = game
 
-        for i, calc in enumerate(calculations, 1):
-            self.game.draw_text(calc, 25, self.game.DISPLAY_W - 150, (i * 50), color=self.game.WHITE, font=self.game.second_font)
+    def play(self):
+        """Override to include math-specific equation generation."""
+        self.generate_equation(self.game.difficulty)
+        super().play()
 
     def generate_equation(self, game_mode):
+        """Generates a math equation and populates options."""
         values = {
             "A": 2,
             "B": 3,
@@ -863,12 +863,13 @@ class MathChampGame(MainGame):
             "E": 11
         }
 
-        questions = {
+        difficulty = {
             'easy': 2,
             'medium': 3,
             'hard': 4
         }
-        num_variables = questions[game_mode]
+
+        num_variables = difficulty[game_mode]
         chosen_vars = random.sample(list(values.items()), num_variables)
 
         equation_str = " + ".join([f"{var}" for var, _ in chosen_vars])
@@ -893,3 +894,178 @@ class MathChampGame(MainGame):
 
         correct_option_key = list(self.options.keys())[options.index(equation_result)]
         self.question, self.answer, self.correct_key = equation_str, equation_result, correct_option_key
+        self.helper = self.draw_helper
+
+    def draw_helper(self):
+        values = {
+            "A": 2,
+            "B": 3,
+            "C": 5,
+            "D": 7,
+            "E": 11
+        }
+
+        # Calculations to display
+        calculations = [
+            f'A + A = {values["A"] + values["A"]}',
+            f'B + A = {values["B"] + values["A"]}',
+            f'B + C = {values["B"] + values["C"]}',
+            f'C + D = {values["D"] + values["C"]}',
+            f'D + E = {values["D"] + values["E"]}'
+        ]
+
+        for i, calc in enumerate(calculations, 1):
+            self.game.draw_text(calc, 25, self.game.DISPLAY_W - 150, (i * 50), color=self.game.WHITE,
+                                font=self.game.second_font)
+
+
+class BinaryConversionGame(QuizGame):
+    def __init__(self, game):
+        super().__init__(game)
+        self.game = game
+
+    def play(self):
+        """Override to include binary-specific logic generation."""
+        self.generate_binary_question()
+        super().play()
+
+    def generate_binary_question(self):
+        """Generates a binary question with multiple-choice options."""
+        # Generate a random binary value within a defined range
+        num_bits = random.randint(4, 8)  # Generate between 4 to 8 bits
+        binary_value = ''.join(random.choices(['0', '1'], k=num_bits))
+        decimal_value = int(binary_value, 2)
+
+        # Generate incorrect options
+        options = set()
+        while len(options) < 3:
+            incorrect = random.randint(decimal_value - 10, decimal_value + 10)
+            if incorrect != decimal_value:
+                options.add(incorrect)
+
+        # Combine correct and incorrect options
+        options = list(options)
+        options.append(decimal_value)
+        random.shuffle(options)
+
+        # Assign to class properties
+        self.options = {
+            "A": options[0],
+            "B": options[1],
+            "C": options[2],
+            "D": options[3],
+        }
+        correct_option_key = list(self.options.keys())[options.index(decimal_value)]
+
+        # Set question and answer
+        self.question = f"What is the decimal equivalent of {binary_value}?"
+        self.answer = decimal_value
+        self.correct_key = correct_option_key
+        self.helper = self.draw_helper
+
+    def draw_helper(self):
+        """Provide helper information to teach binary conversion."""
+        # Example conversion for illustration
+        binary_example = "1011"
+        decimal_example = int(binary_example, 2)
+
+        # Helper display
+        helper_text = [
+            f"Binary {binary_example} = Decimal {decimal_example}",
+            "Each binary digit represents a power of 2:",
+            f"  1 (8) + 0 (4) + 1 (2) + 1 (1) = {decimal_example}"
+        ]
+
+        for i, text in enumerate(helper_text, 1):
+            self.game.draw_text(text, 25, self.game.DISPLAY_W - 50, (i * 50) + 50, color=self.game.WHITE, font=self.game.second_font, position='topright')
+
+
+class WordDecryptionGame(QuizGame):
+    def __init__(self, game):
+        super().__init__(game)
+        self.game = game
+        self.encryption_method = None
+        self.hints_enabled = True
+
+    def play(self):
+        """Override to include decryption-specific game logic."""
+        self.generate_encrypted_challenge()
+        super().play()
+
+    def generate_encrypted_challenge(self):
+        """Generates a hex-based encrypted word or sentence with options."""
+        # Predefined hex-based options
+        hex_easy_options = [
+            {"YOU": "19-F-15"},
+            {"MINE": "D-9-E-5"},
+            {"DATA": "4-1-14-1"}
+        ]
+
+        hex_medium_options = [
+            {"I": "9", "SEE": "13-5-5", "YOU": "19-F-15"},
+            {"NOT": "E-F-14", "ENOUGH": "5-E-F-15-7-8", "TIME": "14-9-D-5"},
+            {"NOT": "E-F-14", "SAFE": "13-1-6-5", "HERE": "8-13-12"}
+        ]
+
+        hex_hard_options = [
+            {"YOUR": "19-F-15-12", "DATA": "4-1-14-1", "IS": "9-13", "MINE": "D-9-E-5"},
+            {"TIME": "14-9-D-5", "IS": "9-13", "RUNNING": "17-15-E-5-9-14-7", "OUT": "F-15-21-14"},
+            {"QUIT": "11-15-9-14", "WHILE": "17-8-9-5", "YOU": "19-F-15", "CAN": "3-1-E"}
+        ]
+
+        # Select options based on difficulty
+        if self.game.difficulty == "easy":
+            options_set = random.choice(hex_easy_options)
+        elif self.game.difficulty == "medium":
+            options_set = random.choice(hex_medium_options)
+        elif self.game.difficulty == "hard":
+            options_set = random.choice(hex_hard_options)
+        else:
+            raise ValueError("Invalid difficulty level")
+
+        # Prepare encrypted word and correct answer
+        encrypted_word = random.choice(list(options_set.values()))
+        original_word = [key for key, value in options_set.items() if value == encrypted_word][0]
+
+        # Generate distractors
+        distractors = [key for key in options_set.keys() if key != original_word]
+
+        # Add default distractors if necessary
+        default_distractors = ["ALPHA", "BETA", "DELTA", "OMEGA"]
+        while len(distractors) < 3:
+            distractors.append(random.choice(default_distractors))
+
+        # Combine correct answer and distractors
+        options = [original_word] + distractors[:3]  # Ensure exactly 4 options
+        random.shuffle(options)
+
+        # Assign to class properties
+        self.options = {
+            "A": options[0],
+            "B": options[1],
+            "C": options[2],
+            "D": options[3],
+        }
+        correct_option_key = list(self.options.keys())[options.index(original_word)]
+
+        # Set question and answer
+        self.question = f"Decrypt this hex: {encrypted_word}"
+        self.answer = original_word
+        self.correct_key = correct_option_key
+        self.helper = self.draw_helper
+        self.encryption_method = "Hexadecimal Encoding"
+
+    def draw_helper(self):
+        """Provide optional hints for hexadecimal encoding."""
+        if not self.hints_enabled:
+            return
+
+        # Explain hexadecimal encoding
+        hints = [
+            "Hint: Each pair represents a character encoded in hexadecimal.",
+            "Hint: A=1, B=2, C=3... F=15."
+        ]
+
+        for i, hint in enumerate(hints, 1):
+            self.game.draw_text(hint, 25, self.game.DISPLAY_W - 50, (i * 50) + 50, color=self.game.WHITE, font=self.game.second_font, position='topright')
+
