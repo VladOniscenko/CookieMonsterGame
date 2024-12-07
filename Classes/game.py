@@ -13,42 +13,65 @@ from Classes.rating import Rating
 
 class Game:
     def __init__(self):
-        self.user_name = None
-        self.asking_name = None
+        # inits
         pygame.init()
         pygame.mixer.init()
 
-        self.guessing_password = False
-        self.display_rules, self.cur_game, self.display_story, self.display_winscreen, self.display_losescreen = None, None, None, None, None
-        self.display_score = None
-        self.total_score = 0
-        self.guessed_characters = []
-        self.password = 'challenge'
-        self.pass_list = list(self.password)
-        self.total_games = 5
-        self.amount_games_unplayed = 5
-        self.played_games = []
-        self.inputted_chars = []
-        self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
-        self.run_win_dialog = None
-
-        self.WIDTH, self.HEIGHT = 1280, 720
-        self.FPS = 60
-
-        # Display setup
+        # screen setup
+        self.sound = self.play_music('main.wav', 99, 90, 20)
         self.display = pygame.Surface((self.WIDTH, self.HEIGHT))
         self.DISPLAY_W, self.DISPLAY_H = self.display.get_size()
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.mid_w, self.mid_h = self.DISPLAY_W / 2, self.DISPLAY_H / 2
+        self.WIDTH, self.HEIGHT = 1280, 720
+        self.FPS = 60
+
+        # password
+        self.guessing_password = False
+        self.guessed_characters = []
+        self.password = 'challenge'
+        self.pass_list = list(self.password)
+
+        # attributes
+        self.game_controller = None
+        self.user_name = None
+        self.asking_name = None
+        self.display_rules = None
+        self.cur_game = None
+        self.display_story = None
+        self.display_winscreen = None
+        self.display_losescreen = None
+        self.display_score = None
+        self.run_win_dialog = None
+        
+        self.total_score = 0
+        self.total_games = 5
+        self.amount_games_unplayed = 5
+
+        self.played_games = []
+        self.inputted_chars = []
+        self.alphabet = list('abcdefghijklmnopqrstuvwxyz')
 
         # Reference values
-        self.running, self.playing, self.game_mode, self.start_time, self.end_time = True, False, False, False, False
-        self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
+        self.running = True
+        self.playing = False
+        self.game_mode = False
+        self.start_time = False
+        self.end_time = False
 
+        # keys
+        self.OTHER_KEY = [] 
+        self.LEFT_KEY = False
+        self.RIGHT_KEY = False
+        self.UP_KEY = False
+        self.DOWN_KEY = False
+        self.START_KEY = False
+        self.BACK_KEY = False
+        self.ESC_KEY = False
+
+        # game and difficulty
         self.game_mode = False
         self.difficulty = False
-
-        self.sound = self.play_music('main.wav', 99, 90, 20)
 
         # Styling
         self.font = get_asset_path('Font', '8-BIT WONDER.TTF')
@@ -60,14 +83,11 @@ class Game:
         self.difficulties = DifficultyMenu(self)
         self.mini_game_menu = MiniGameMenu(self)
         self.rating = Rating(self)
-
         self.rps_game = RPSGame(self)
         self.hangman_game = HangmanGame(self)
         self.binarize_game = BinaryConversionGame(self)
         self.encrypter_game = WordDecryptionGame(self)
         self.math_champ_game = MathChampGame(self)
-
-        self.game_controller = None
 
     def game_loop(self) -> None:
         if not self.playing:
@@ -83,12 +103,11 @@ class Game:
         self.pre_story()
 
         while self.playing:
-            self.check_events()
             self.cur_game = False
+            self.check_events()
 
             # select game
             self.mini_game_menu.display_menu()
-
             self.game_controller = self.get_game_controller()
 
             if self.game_controller:
@@ -125,7 +144,6 @@ class Game:
         # check if user inputted correct password
         # and display result of it
         self.win_dialog()
-
         self.end_time = int(time.time())
 
         # show user score and time
@@ -149,26 +167,26 @@ class Game:
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    self.START_KEY = True
-                if event.key == pygame.K_BACKSPACE:
-                    self.BACK_KEY = True
-                if event.key == pygame.K_DOWN:
-                    self.DOWN_KEY = True
-                if event.key == pygame.K_UP:
-                    self.UP_KEY = True
-                if event.key == pygame.K_ESCAPE:
-                    self.ESC_KEY = True
-                if event.key == pygame.K_LEFT:
-                    self.LEFT_KEY = True
-                if event.key == pygame.K_RIGHT:
-                    self.RIGHT_KEY = True
+                self.START_KEY = event.key == pygame.K_RETURN
+                self.BACK_KEY = event.key == pygame.K_BACKSPACE
+                self.DOWN_KEY = event.key == pygame.K_DOWN
+                self.UP_KEY = event.key == pygame.K_UP
+                self.ESC_KEY = event.key == pygame.K_ESCAPE
+                self.LEFT_KEY = event.key == pygame.K_LEFT
+                self.RIGHT_KEY = event.key == pygame.K_RIGHT
 
                 if pygame.K_a <= event.key <= pygame.K_z:
                     self.OTHER_KEY.append(chr(event.key).lower())
 
     def reset_keys(self) -> None:
-        self.OTHER_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY, self.ESC_KEY = [], False, False, False, False, False, False, False
+        self.OTHER_KEY = [] 
+        self.LEFT_KEY = False
+        self.RIGHT_KEY = False
+        self.UP_KEY = False
+        self.DOWN_KEY = False
+        self.START_KEY = False
+        self.BACK_KEY = False
+        self.ESC_KEY = False
 
     def draw_text(self, text: str, size: int | float, x: int | float, y: int | float, **kwargs) -> None:
 
@@ -200,11 +218,7 @@ class Game:
         self.start_time = int(time.time())
 
     def get_background(self, name: str) -> pygame.image:
-        # Use the helper function to get the correct path for the background
-        path = get_asset_path('Background', name)
-
-        # Load and scale the background image
-        selected_image = pygame.image.load(path)
+        selected_image = pygame.image.load(get_asset_path('Background', name)) # Load and scale the background image
         return pygame.transform.scale(selected_image, (self.DISPLAY_W, self.DISPLAY_H))
 
     def play_music(self, file_path: str, loops: int = 1, start: float = 0.0, fade: int = 500, volume: float = 0.03, play: bool = True) -> pygame.mixer:
@@ -230,18 +244,15 @@ class Game:
         return pygame.mixer
 
     def get_game_controller(self) -> RPSGame | HangmanGame | MathChampGame | BinaryConversionGame | WordDecryptionGame | None:
-        if self.game_mode == 'rps':
-            return self.rps_game
-        elif self.game_mode == 'hangman':
-            return self.hangman_game
-        elif self.game_mode == 'math_champ':
-            return self.math_champ_game
-        elif self.game_mode == 'encrypter':
-            return self.encrypter_game
-        elif self.game_mode == 'binarize':
-            return self.binarize_game
-        else:
-            return None
+        controllers = {
+            'rps': self.rps_game,
+            'hangman': self.hangman_game,
+            'math_champ': self.math_champ_game,
+            'encrypter': self.encrypter_game,
+            'binarize': self.binarize_game,
+        }
+    
+         return controllers.get(self.game_mode, None)
 
     def show_rules(self) -> None:
         # stop playing any music
