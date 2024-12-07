@@ -459,7 +459,7 @@ class Game:
                 y_offset = 50
 
                 self.draw_text(
-                    'HAHAH I AM COMING CLOSER',
+                    'HAHAH I AM GETTING CLOSER',
                     50,
                     self.mid_w,
                     y_start + y_offset,
