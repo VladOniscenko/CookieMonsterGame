@@ -17,7 +17,7 @@ class Rating:
             self.game.display.fill(self.game.WHITE)
 
             self.game.draw_text(
-                'High Scores',
+                'Best Scores',
                 30,
                 self.game.DISPLAY_W / 2,
                 self.game.DISPLAY_H / 2 - 300,

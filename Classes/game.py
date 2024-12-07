@@ -540,7 +540,6 @@ class Game:
             self.draw_text('Time played', 20, col1_x, 200, color=self.WHITE, position='center')
             self.draw_text(f'{self.end_time - self.start_time}', 20, col1_x, 300, color=self.ORANGE, position='center')
 
-
             # print score
             self.draw_text('Score gained', 20, col2_x, 200, color=self.WHITE, position='center')
             self.draw_text(f'{self.get_score()}', 20, col2_x, 300, color=self.ORANGE, position='center')
