@@ -62,6 +62,7 @@ class Rating:
 
     def get_scores(self):
         with open(get_asset_path('Other', 'scoreboard.csv'), mode='r') as file:
+            next(file)
             data = list(csv.reader(file))
         return sorted(data, key=lambda line: int(line[1]), reverse=True)[:11]
 
