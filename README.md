@@ -51,7 +51,23 @@ Each mini-game provides an opportunity to earn a letter for the final password. 
 Step into the darkness, master the mini-games, and crack the password to escape. With haunting visuals and challenging puzzles, **Horror Adventure** will keep you on edge!
 
 ---
+## Preview 📸
 
+Here are some screenshots of the app in action:
+
+### Game Main Menu
+![Task Manager Interface](assets/prev-1.png)
+
+### User name input
+![Task Manager Interface](assets/prev-2.png)
+
+### Mini game (Rock, Paper & Scissors)
+![Task Manager Interface](assets/prev-3.png)
+
+### Mini game (Hangman)
+![Task Manager Interface](assets/prev-4.png)
+
+---
 ## 💻 Requirements
 
 - **Python 3.8+**
